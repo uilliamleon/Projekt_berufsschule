@@ -571,17 +571,19 @@ HHBKTendo positioniert sich als modernes, technologiegetriebenes Spielestudio mi
 
 ### 15.2 Farbpalette
 
-Die gesamte Farbwelt folgt einem dunklen Nacht-Thema mit gezielten Akzentfarben. Jede Farbe hat eine definierte semantische Rolle.
+Die gesamte Farbwelt folgt dem offiziellen **HHBKTendo Design System (Investor Edition)**. Jede Farbe hat eine definierte semantische Rolle und einen CSS-Token-Namen sowie eine korrespondierende Python-Variable.
 
-| Token | Hex | Vorschau | Rolle | Begründung |
-|-------|-----|----------|-------|------------|
-| `bg_dark` | `#1a1a2e` | ██ Nacht-Marine | Haupthintergrund aller Screens | Dunkelstes Blau – erzeugt Tiefe, reduziert Augenermüdung bei längeren Spielsessions. Assoziiert mit Nacht, Konzentration, Technologie. |
-| `bg_mid` | `#16213e` | ██ Tief-Blau | Header- und Navigationsleisten | Leicht heller als bg_dark, schafft subtile Hierarchie ohne harte Kontraste. |
-| `bg_card` | `#0f3460` | ██ Dunkel-Blau | Karten, Eingabefelder, Dialoge | Klare Abgrenzung von Inhalten ohne Weiß zu verwenden. Signalisiert „interaktiver Bereich". |
-| `accent` | `#e94560` | ██ HHBKTendo-Rot | Primäre Buttons, Titel, Logo | Markante Signalfarbe. Rot steht für Spannung, Wettkampf und Aufmerksamkeit – passend für Spielstarts und Call-to-Actions. |
-| `accent2` | `#533483` | ██ Lila | Sekundäre Buttons (Register, Leaderboard) | Ruhigere Alternative zum Rot, signalisiert Nebenaktionen. Lila assoziiert KI und Tech. |
-| `text_light` | `#eaeaea` | ██ Hellgrau | Primärtext, Labels | Kein reines Weiß – sanfterer Kontrast auf dunklem Grund, angenehmer zu lesen. |
-| `text_dim` | `#a0a0b0` | ██ Gedämpftes Grau | Sekundärtext, Hints, Statuszeilen | Visuell untergeordnet, ohne unsichtbar zu sein. |
+| CSS-Token | Python-Variable | Hex | Name | Rolle |
+|-----------|-----------------|-----|------|-------|
+| `--bg-deep` | `BG_DEEP` | `#0d0f1a` | Deep Navy | App-Hintergrund aller Screens |
+| `--bg-card` | `BG_CARD` | `#1a2040` | Card Navy | Karten, Container, Dialoge |
+| `--bg-mid` | `BG_MID` | `#1e2850` | Mid Navy | Eingabefelder, Surfaces, Header |
+| `--primary` | `PRIMARY` | `#e8365d` | Hot Pink | Primär-CTA, Logo, Danger-Aktionen |
+| `--secondary` | `SECONDARY` | `#6c3fc5` | Royal Purple | Sekundäre Buttons (Register, Leaderboard) |
+| `--accent` | `ACCENT` | `#00d4ff` | Cyber Cyan | Active States, Outlines, Hover |
+| `--text-primary` | `TEXT_PRIMARY` | `#ffffff` | White | Primärtext, Labels |
+| `--text-secondary` | `TEXT_SECONDARY` | `#8a9cc0` | Slate Blue | Sekundärtext, Statuszeilen |
+| `--text-muted` | `TEXT_MUTED` | `#4a5680` | – | Dezenter Text, Hints, Platzhalter |
 
 #### Spielfeld-Farben
 
@@ -589,10 +591,10 @@ Die gesamte Farbwelt folgt einem dunklen Nacht-Thema mit gezielten Akzentfarben.
 |-------|-----|------------|
 | `board_light` | `#eecc99` | Helle Felder Bauernschach – klassisches Schach-Beige |
 | `board_dark` | `#8b5e3c` | Dunkle Felder Bauernschach – warmes Holzbraun |
-| `ttt_x` | `#64b5f6` | X-Stein (Mensch) in Tic-Tac-Toe – Hellblau: kühl, präzise |
-| `ttt_o` | `#ef5350` | O-Stein (KI) in Tic-Tac-Toe – Rot: aggressiv, Gegner |
+| `ttt_x` | `#00d4ff` | X-Stein (Mensch) in Tic-Tac-Toe – orientiert an ACCENT (Cyber Cyan): kühl, präzise |
+| `ttt_o` | `#e8365d` | O-Stein (KI) in Tic-Tac-Toe – orientiert an PRIMARY (Hot Pink): aggressiv, Gegner |
 | `valid_move` | `#2e7d32` | Gültige Züge (Bauernschach) – Grün: „hier kann ich hin" |
-| `highlight` | `#e94560` | Ausgewählte Figur – Akzentrot: „das ist aktiv" |
+| `highlight` | `#e8365d` | Ausgewählte Figur – PRIMARY Hot Pink: „das ist aktiv" |
 
 ---
 
@@ -605,17 +607,26 @@ Die gesamte Farbwelt folgt einem dunklen Nacht-Thema mit gezielten Akzentfarben.
 
 ### 15.3 Typografie
 
-| Einsatz | Schriftart | Stil | Größe |
-|---------|-----------|------|-------|
-| Haupttitel (HHBKTendo) | Segoe UI | Bold | 28 pt |
-| Screen-Überschriften | Segoe UI | Bold | 16 pt |
-| Karten-Titel, Spielname | Segoe UI | Bold | 13 pt |
-| Buttons | Segoe UI | Bold | 11 pt |
-| Labels, Texte | Segoe UI | Regular | 11–12 pt |
-| Statuszeilen, Hints | Segoe UI | Regular | 9–10 pt |
-| Spielfigur-Symbole (Bauernschach) | Arial | Bold | 22 pt |
+Das Design System definiert zwei Schriftfamilien mit unterschiedlichen Einsatzbereichen:
 
-Segoe UI ist die Systemschrift unter Windows 10/11 (Zielplattform) und ermöglicht scharfe Darstellung ohne zusätzliche Schriftinstallation. Die ausschließliche Verwendung einer Schriftfamilie hält das Design ruhig und konsistent.
+**Display & Headings – Orbitron**
+
+| Einsatz | Schriftart | Gewicht | Größe |
+|---------|-----------|---------|-------|
+| Logo / Haupttitel (HHBKTendo) | Orbitron | 900 (Black) | 28 pt |
+| Screen-Überschriften (H1) | Orbitron | 700 (Bold) | 16 pt |
+| Karten-Titel, Spielname (H2) | Orbitron | 400 (Regular) | 13 pt |
+
+**Body, Buttons & Labels – Exo 2**
+
+| Einsatz | Schriftart | Gewicht | Größe |
+|---------|-----------|---------|-------|
+| Buttons | Exo 2 | 700 (Bold) | 11 pt |
+| Labels, Fließtext | Exo 2 | 400 (Regular) | 11–12 pt |
+| Statuszeilen, Hints | Exo 2 | 300 (Light) | 9–10 pt |
+| Spielfigur-Symbole (Bauernschach) | Exo 2 / System | 700 (Bold) | 22 pt |
+
+Orbitron und Exo 2 sind als Google Fonts frei verfügbar. Im tkinter-Fallback (keine Netzwerkinstallation) werden sie durch `Courier` (Orbitron) bzw. `Helvetica` (Exo 2) ersetzt. Die Zielplattform Windows 10/11 unterstützt beide Schriften ohne Einschränkungen.
 
 ---
 
@@ -626,15 +637,15 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 #### 15.4.1 Login-Screen
 
 ```
-┌─────────────────────────────────────────────┐  bg_dark #1a1a2e
+┌─────────────────────────────────────────────┐  bg-deep #0d0f1a
 │                                             │
-│              HHBKTendo                      │  ← accent #e94560, 28pt Bold
-│        HHBKTendo Game Collection            │  ← text_dim, 13pt
+│              HHBKTendo                      │  ← primary #e8365d, 28pt Orbitron 900
+│        HHBKTendo Game Collection            │  ← text-secondary #8a9cc0, 13pt Exo 2
 │                                             │
-│  ┌───────────────────────────────────────┐  │  bg_card #0f3460
+│  ┌───────────────────────────────────────┐  │  bg-card #1a2040
 │  │                                       │  │
-│  │  Username                             │  │  ← text_light
-│  │  ┌─────────────────────────────────┐  │  │
+│  │  Username                             │  │  ← text-primary #ffffff
+│  │  ┌─────────────────────────────────┐  │  │  bg-mid #1e2850
 │  │  │                                 │  │  │  ← Eingabefeld
 │  │  └─────────────────────────────────┘  │  │
 │  │                                       │  │
@@ -644,31 +655,31 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 │  │  └─────────────────────────────────┘  │  │
 │  │                                       │  │
 │  │  ┌─────────────────────────────────┐  │  │
-│  │  │            Login                │  │  │  ← accent #e94560
+│  │  │            Login                │  │  │  ← primary #e8365d
 │  │  └─────────────────────────────────┘  │  │
 │  │  ┌─────────────────────────────────┐  │  │
-│  │  │           Register              │  │  │  ← accent2 #533483
+│  │  │           Register              │  │  │  ← secondary #6c3fc5
 │  │  └─────────────────────────────────┘  │  │
 │  │  ─────────────────────────────────    │  │  ← Trennlinie
 │  │  ┌─────────────────────────────────┐  │  │
-│  │  │        Play as Guest            │  │  │  ← #444466
+│  │  │        Play as Guest            │  │  │  ← text-muted #4a5680
 │  │  └─────────────────────────────────┘  │  │
 │  └───────────────────────────────────────┘  │
-│                              [ DE / EN ]    │  ← text_dim
+│                              [ DE / EN ]    │  ← text-secondary #8a9cc0
 └─────────────────────────────────────────────┘
 ```
 
 #### 15.4.2 Hauptmenü
 
 ```
-┌─────────────────────────────────────────────────────────────┐  bg_dark
-│  ████ HHBKTendo   alice              [ DE/EN ]  [ Logout ]  │  bg_mid header
+┌─────────────────────────────────────────────────────────────┐  bg-deep #0d0f1a
+│  ████ HHBKTendo   alice              [ DE/EN ]  [ Logout ]  │  bg-mid #1e2850 (Header)
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│                    Select a Game                            │  ← 16pt Bold
+│                    Select a Game                            │  ← 16pt Orbitron 700
 │                                                             │
-│  ┌──────────────────────────┐  ┌──────────────────────────┐ │  bg_card
-│  │      Pawn Chess          │  │  Tic-Tac-Toe (4 in a Row)│ │  ← 13pt Bold
+│  ┌──────────────────────────┐  ┌──────────────────────────┐ │  bg-card #1a2040
+│  │      Pawn Chess          │  │  Tic-Tac-Toe (4 in a Row)│ │  ← 13pt Orbitron 400
 │  │                          │  │                          │ │
 │  │  Difficulty              │  │  Difficulty              │ │
 │  │  ○ Easy                  │  │  ○ Easy                  │ │
@@ -678,10 +689,10 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 │  │  ○ Master                │  │  ○ Master                │ │
 │  │                          │  │                          │ │
 │  │  ┌──────────────────┐    │  │  ┌──────────────────┐    │ │
-│  │  │      Play        │    │  │  │      Play        │    │ │  ← accent
+│  │  │      Play        │    │  │  │      Play        │    │ │  ← primary #e8365d
 │  │  └──────────────────┘    │  │  └──────────────────┘    │ │
 │  │  ┌──────────────────┐    │  │  ┌──────────────────┐    │ │
-│  │  │   Leaderboard    │    │  │  │   Leaderboard    │    │ │  ← accent2
+│  │  │   Leaderboard    │    │  │  │   Leaderboard    │    │ │  ← secondary #6c3fc5
 │  │  └──────────────────┘    │  │  └──────────────────┘    │ │
 │  └──────────────────────────┘  └──────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
@@ -690,23 +701,23 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 #### 15.4.3 Spielscreen – Bauernschach
 
 ```
-┌─────────────────────────────────────────────────────────────┐  bg_dark
-│  ████ Pawn Chess │ Hard │ Your turn          [Rules][Abort] │  bg_mid
+┌─────────────────────────────────────────────────────────────┐  bg-deep #0d0f1a
+│  ████ Pawn Chess │ Hard │ Your turn          [Rules][Abort] │  bg-mid #1e2850
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │          0       1       2       3       4       5          │
 │        ┌───────┬───────┬───────┬───────┬───────┬───────┐   │
 │   0    │  ♟   │▓▓▓▓▓▓▓│  ♟   │▓▓▓▓▓▓▓│  ♟   │▓▓▓▓▓▓▓│   │  KI-Bauern
-│        ├───────┼───────┼───────┼───────┼───────┼───────┤   │  #1a1a2e/#aaaaaa
+│        ├───────┼───────┼───────┼───────┼───────┼───────┤   │  text-secondary #8a9cc0
 │   1    │▓▓▓▓▓▓▓│       │▓▓▓▓▓▓▓│       │▓▓▓▓▓▓▓│       │   │
 │        ├───────┼───────┼───────┼───────┼───────┼───────┤   │
 │   2    │       │▓▓▓▓▓▓▓│       │▓▓▓▓▓▓▓│       │▓▓▓▓▓▓▓│   │
 │        ├───────┼───────┼───────┼───────┼───────┼───────┤   │
 │   3    │▓▓▓▓▓▓▓│       │▓▓▓▓▓▓▓│       │▓▓▓▓▓▓▓│       │   │
 │        ├───────┼───────┼───────┼───────┼───────┼───────┤   │
-│   4    │       │▓▓▓▓▓▓▓│  ●   │▓▓▓▓▓▓▓│  ○   │▓▓▓▓▓▓▓│   │  ● ausgewählt (#e94560)
+│   4    │       │▓▓▓▓▓▓▓│  ●   │▓▓▓▓▓▓▓│  ○   │▓▓▓▓▓▓▓│   │  ● ausgewählt (primary #e8365d)
 │        ├───────┼───────┼───────┼───────┼───────┼───────┤   │  ○ gültiger Zug (#2e7d32)
-│   5    │  ♙   │  ♙   │▓▓▓▓▓▓▓│  ♙   │▓▓▓▓▓▓▓│  ♙   │   │  Mensch-Bauern #fff
+│   5    │  ♙   │  ♙   │▓▓▓▓▓▓▓│  ♙   │▓▓▓▓▓▓▓│  ♙   │   │  Mensch-Bauern text-primary #fff
 │        └───────┴───────┴───────┴───────┴───────┴───────┘   │
 │                                                             │
 │  ▓ = board_dark #8b5e3c   □ = board_light #eecc99          │
@@ -716,15 +727,15 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 #### 15.4.4 Spielscreen – Tic-Tac-Toe (4 gewinnt)
 
 ```
-┌─────────────────────────────────────────────────────────────┐  bg_dark
-│  ████ Tic-Tac-Toe (4 in a Row) │ Hard │ AI is thinking...  │  bg_mid
+┌─────────────────────────────────────────────────────────────┐  bg-deep #0d0f1a
+│  ████ Tic-Tac-Toe (4 in a Row) │ Hard │ AI is thinking...  │  bg-mid #1e2850
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
 │     ┌───────┬───────┬───────┬───────┬───────┬───────┐      │
 │     │       │       │       │       │       │       │      │
 │     ├───────┼───────┼───────┼───────┼───────┼───────┤      │
-│     │       │   X   │   O   │       │       │       │      │  X = ttt_x #64b5f6
-│     ├───────┼───────┼───────┼───────┼───────┼───────┤      │  O = ttt_o #ef5350
+│     │       │   X   │   O   │       │       │       │      │  X = accent #00d4ff (Cyan)
+│     ├───────┼───────┼───────┼───────┼───────┼───────┤      │  O = primary #e8365d (Hot Pink)
 │     │       │   O   │   X   │   X   │       │       │      │
 │     ├───────┼───────┼───────┼───────┼───────┼───────┤      │
 │     │       │       │   O   │   X   │       │       │      │
@@ -749,46 +760,106 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 │                          │        You win!               │  │  ← win #4caf50
 │                          │                               │  │
 │                          │  ┌─────────────────────────┐  │  │
-│                          │  │      Back to Menu        │  │  │  ← accent
+│                          │  │      Back to Menu        │  │  │  ← primary #e8365d
 │                          │  └─────────────────────────┘  │  │
 │                          └───────────────────────────────┘  │
 └─────────────────────────────────────────────────────────────┘
 
   Ergebnisfarben:  You win!  → #4caf50 (Grün)
-                  AI wins!  → #e94560 (Rot / accent)
+                  AI wins!  → primary #e8365d (Hot Pink)
                   Draw!     → #ff9800 (Orange)
 ```
 
 #### 15.4.6 Bestenliste (Popup)
 
 ```
-┌─────────────────────────────────────────┐  bg_dark
+┌─────────────────────────────────────────┐  bg-deep #0d0f1a
 │                                         │
-│    Leaderboard – Pawn Chess – Hard      │  ← accent, Bold
+│    Leaderboard – Pawn Chess – Hard      │  ← primary #e8365d, Orbitron Bold
 │                                         │
 │  ┌─────────────────────────────────┐    │
-│  │  Rang  Spieler   Siege  Niederl │    │  bg_card
+│  │  Rang  Spieler   Siege  Niederl │    │  bg-card #1a2040
 │  │  ────  ───────   ─────  ─────── │    │
-│  │   1    alice       7       2    │    │  ← text_light
+│  │   1    alice       7       2    │    │  ← text-primary #ffffff
 │  │   2    bob         5       4    │    │
 │  │   3    carol       3       1    │    │
 │  │   4    dave        1       6    │    │
 │  └─────────────────────────────────┘    │
 │                                         │
 │         ┌─────────────────┐             │
-│         │     Close       │             │  ← accent
+│         │     Close       │             │  ← primary #e8365d
 │         └─────────────────┘             │
 └─────────────────────────────────────────┘
 ```
 
 ---
 
-### 15.5 Designprinzipien
+### 15.5 Design Tokens
+
+#### Border Radius
+
+| Token | Wert | Verwendung |
+|-------|------|------------|
+| None | 0 px | Spielfeld-Zellen, tabellarische Bereiche |
+| Small | 6 px | Buttons, Eingabefelder |
+| Medium | 12 px | Karten, Dialoge |
+| Large | 20 px | Panels, Overlays |
+| Pill | 100 px | Badge-Labels, Chip-Elemente |
+
+#### Spacing Scale
+
+| Token | Wert | Verwendung |
+|-------|------|------------|
+| XS | 4 px | Interne Icon-Abstände |
+| SM | 8 px | Padding innerhalb von Buttons/Tags |
+| MD | 16 px | Standard-Padding in Karten |
+| LG | 24 px | Abstand zwischen Sektionen |
+| XL | 32 px | Große Außenabstände |
+| XXL | 48 px | Screen-seitliche Ränder |
+
+---
+
+### 15.6 Glow & Effekte
+
+Leuchtende Akzente (Glow) verstärken das Gaming-Feeling und heben interaktive Elemente hervor.
+
+| Effekt | CSS-Formel | Verwendung |
+|--------|-----------|------------|
+| Primary Glow | `box-shadow: 0 0 24px rgba(232, 54, 93, 0.35)` | Primär-Buttons (Login, Play, Close) |
+| Secondary Glow | `box-shadow: 0 0 24px rgba(108, 63, 197, 0.35)` | Sekundär-Buttons (Register, Leaderboard) |
+| Accent Glow | `box-shadow: 0 0 24px rgba(0, 212, 255, 0.35)` | Aktive Felder, Hover-Zustände |
+
+In tkinter werden Glow-Effekte durch Rahmenfarbe (`highlightbackground`) und leicht hellere Button-Farbe beim Hover simuliert.
+
+---
+
+### 15.7 Python Code-Export
+
+Offizielle Token-Konstanten für die Implementierung in `main.py`:
+
+```python
+# HHBKTendo Design System – Color Tokens
+BG_DEEP        = "#0d0f1a"   # Deep Navy  – App-Hintergrund
+BG_CARD        = "#1a2040"   # Card Navy  – Karten & Container
+BG_MID         = "#1e2850"   # Mid Navy   – Eingabefelder / Surfaces
+
+PRIMARY        = "#e8365d"   # Hot Pink   – Primär-CTA, Logo, Danger
+SECONDARY      = "#6c3fc5"   # Royal Purple – Sekundäre Buttons
+ACCENT         = "#00d4ff"   # Cyber Cyan – Active States, Outlines
+
+TEXT_PRIMARY   = "#ffffff"   # White      – Primärtext
+TEXT_SECONDARY = "#8a9cc0"   # Slate Blue – Sekundärtext
+TEXT_MUTED     = "#4a5680"   #            – Dezenter Text, Hints
+```
+
+---
+
+### 15.8 Designprinzipien
 
 | Prinzip | Umsetzung |
 |---------|-----------|
 | **Dunkel-First** | Alle Hintergründe dunkel – kein heller Screen in der gesamten App |
-| **Farbhierarchie** | Rot (accent) = primär, Lila (accent2) = sekundär, Grau = passiv |
+| **Farbhierarchie** | Hot Pink (primary) = primär, Royal Purple (secondary) = sekundär, Slate Blue = passiv |
 | **Konsistenz** | Alle interaktiven Elemente (Buttons) gleiche Form, Schrift und Padding |
 | **Feedback** | Jeder Zustandswechsel hat eine visuelle Entsprechung (Farbe, Symbol) |
 | **Plattformkompatibilität** | Buttons als `tk.Label` mit Bindings – funktioniert auf Windows und macOS |
@@ -803,5 +874,6 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 | 1.2 | 2026-04-21 | Tic-Tac-Toe gemäß Lastenheft (LF4020) auf 6×6 / 4 in einer Reihe zurückgesetzt; PF-M03, Abschnitt 4.2, Bewertungsfunktion, TC-09–TC-11 wiederhergestellt |
 | 1.3 | 2026-04-22 | Abgleich mit Lastenheft: PF-K03 (Dame) und PF-K04 (alternative KI-Schnittstelle) als Kann-Ziele ergänzt; neuer Abschnitt 12 mit Dokumentations- und Konzeptanforderungen (DOC-01–DOC-13) aus LD5100–LD5500; Abschnitt 14.2 Offene Punkte erweitert; Liefergegenstände mit Anforderungsreferenzen verknüpft |
 | 1.4 | 2026-04-22 | Neuer Abschnitt 15: Design und Corporate Identity – Farbpalette mit Begründungen, Typografie, Designprinzipien und ASCII-Mockups aller sechs Hauptscreens (Login, Menü, Bauernschach, Tic-Tac-Toe, Ergebnis-Overlay, Bestenliste) |
+| 1.5 | 2026-04-22 | Abschnitt 15 auf offizielles HHBKTendo Design System (Investor Edition) aktualisiert: Farbpalette auf 9 PDF-Tokens (Deep Navy, Card Navy, Mid Navy, Hot Pink, Royal Purple, Cyber Cyan, White, Slate Blue, Muted) umgestellt; Typografie von Segoe UI auf Orbitron (Display) + Exo 2 (Body) umgestellt; neue Abschnitte 15.5 Design Tokens (Radius/Spacing), 15.6 Glow & Effekte, 15.7 Python Code-Export ergänzt; alle Mockup-Farbannotationen aktualisiert |
 
 *Pflichtenheft erstellt auf Basis des Lastenhefts Strategiespiele V13a, HHBK Tendo Research Center, 2026.*
