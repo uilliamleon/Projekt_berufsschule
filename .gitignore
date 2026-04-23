@@ -1,0 +1,14 @@
+# Datenbank (wird automatisch erstellt)
+games.db
+
+# Session-Datei (Auto-Login, nutzerspezifisch)
+session.json
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.idea/
+*.iml
