@@ -228,7 +228,7 @@ def build_login_screen(root, frame):
     """Baut den Login/Register-Screen."""
     # Header
     tk.Label(
-        frame, text="HHBKTendo",
+        frame, text="BlitzBoard",
         bg=COLORS["bg_dark"], fg=COLORS["accent"],
         font=("Segoe UI", 28, "bold")
     ).pack(pady=(40, 4))
@@ -904,7 +904,7 @@ def main():
     database.init_db()
 
     root = tk.Tk()
-    root.title("HHBKTendo")
+    root.title("HHBKTendo-BlitzBoard")
     root.geometry("820x700")
     root.minsize(720, 600)
     root.configure(bg=COLORS["bg_dark"])
