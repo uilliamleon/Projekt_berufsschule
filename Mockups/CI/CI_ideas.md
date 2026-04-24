@@ -4,8 +4,8 @@
 
 **Name:** HHBKtendo
 
-**Beschreibung:** HHBKtendo ist eine deutsche Online-Brettspielplattform,
-die klassische 2-Player-Spiele wie Schach, Dame und Tic-Tac-Toe digital
+**Beschreibung:** HHBKtendo ist eine deutsche Marke für eine digitale Brettspiel-App namens Blitz Board,
+die klassische 2-Player-Spiele wie Bauernschach und Tic-Tac-Toe digital
 erlebbar macht – für Familien und junge Leute, die gemeinsam Spaß haben wollen.
 
 ---
@@ -20,8 +20,8 @@ einem Lächeln.
 
 ## 3. Vision Statement
 
-Wir wollen die beste Online-Brettspielfirma Deutschlands werden und Familien
-weltweit die schönsten Brettspielklassiker aller Kulturen online zugänglich machen.
+Wir wollen die beste digitale Brettspielmarke Deutschlands werden und Familien
+weltweit die schönsten Brettspielklassiker aller Kulturen digital zugänglich machen.
 
 ---
 
@@ -29,7 +29,7 @@ weltweit die schönsten Brettspielklassiker aller Kulturen online zugänglich ma
 
 - **Ton:** Modern, jugendlich und direkt
 - **Ansprache:** Du (duzen)
-- **Stil:** Locker, energetisch, einladend – aber nicht kindisch
+- **Stil:** Locker, energetisch, einladend - aber nicht zu kindisch
 
 **Slogan:**
 
@@ -52,7 +52,7 @@ weltweit die schönsten Brettspielklassiker aller Kulturen online zugänglich ma
 ### Schriftarten
 
 - **Stil:** Modern, serifenlos (sans-serif)
-- **Beispiele:** Inter, Nunito, Poppins
+- **Beispiele:** Inter, Montserrat, Poppins
 
 ### Formen
 
@@ -64,7 +64,7 @@ weltweit die schönsten Brettspielklassiker aller Kulturen online zugänglich ma
 
 - ⚡ Blitz – Energie, Schnelligkeit, Wettkampf
 - 🎲 Brett – Klassik, Strategie, Tradition
-- 🎮 Controller – Digitalität, moderne Gaming-Kultur
+- 🎮 Gamepad – Digitalität, moderne Gaming-Kultur
 
 ---
 
