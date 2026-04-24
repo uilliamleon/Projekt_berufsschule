@@ -961,12 +961,12 @@ TEXT_MUTED     = "#4a5680"   #            – Dezenter Text, Hints
 
 **Markenname: HHBKTendo**
 
-Der Name setzt sich aus zwei Teilen zusammen:
+Der Name ist eine direkte Zusammensetzung aus zwei Teilen:
 
-- **HHBK** steht für die *Handelsschule Hamburg-Bergedorf Kaufmann* – den schulischen Ursprung des Projekts. Die Abkürzung verankert die Marke bewusst in ihrem Entstehungskontext und signalisiert: Dieses Produkt wurde von echten Menschen mit echtem Bildungsauftrag entwickelt, nicht von einer gesichtslosen Konzernstruktur.
-- **Tendo** ist angelehnt an das japanische Wort *tendon* (天道, „Himmelsweg") sowie an den klanglichen Bezug zu *Nintendo* – dem bekanntesten Gaming-Unternehmen der Welt. „Tendo" steht für Spielfreude, für kulturelle Offenheit und für den Anspruch, in der Welt des digitalen Spielens einen eigenen Weg zu gehen.
+- **HHBK** steht für das *Heinrich-Hertz-Berufskolleg* – die Schule, an der das Projekt entstanden ist. Die Abkürzung verankert die Marke bewusst in ihrem Entstehungskontext und signalisiert: Dieses Produkt wurde von echten Menschen mit echtem Bildungsauftrag entwickelt.
+- **Tendo** ist dem Namen *Nintendo* – dem bekanntesten Gaming-Unternehmen der Welt – entnommen. Die Anlehnung ist bewusst gewählt: Sie steht für Spielfreude, Qualität und den Anspruch, in der Welt des digitalen Spielens einen eigenen Weg zu gehen.
 
-Zusammen ergibt **HHBKTendo** eine Marke, die lokale Identität mit globalem Gaming-Anspruch verbindet: ernst genug für den Bildungskontext, cool genug für den Markt.
+Zusammen ergibt **HHBKTendo** eine Marke, die schulische Identität mit Gaming-Kultur verbindet: verwurzelt im Bildungskontext, positioniert im Spielemarkt.
 
 Der Produktname der App lautet **BlitzBoard** – ein Titel, der Geschwindigkeit (*Blitz*) mit dem klassischen Brettspiel-Format (*Board*) verbindet. Er kommuniziert: Hier kommt man schnell rein, spielt sofort, ohne Hürden. Der Produktname wird im Investor-Pitch und im Marketing-Kontext verwendet; in der Anwendung selbst tritt der Markenname HHBKTendo in den Vordergrund.
 

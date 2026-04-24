@@ -8,25 +8,38 @@ import os
 import re
 import sys
 
-# macOS: Homebrew-Bibliotheken (libgobject, libpango) für WeasyPrint einbinden.
-# Python 3.7 (x86_64) ist inkompatibel mit den ARM64-Homebrew-Libraries →
-# automatisch auf python3 (universal binary) wechseln.
-# SIP strippt DYLD_LIBRARY_PATH beim os.execv, daher subprocess als Workaround.
-_homebrew_lib = "/opt/homebrew/lib"
-if sys.platform == "darwin" and os.path.isdir(_homebrew_lib):
-    if os.environ.get("_WEASYPRINT_READY") != "1":
-        import subprocess
-        import shutil
-        # python3.7 ist x86_64 und inkompatibel → bevorzuge python3 als ARM64
-        python = shutil.which("python3") or sys.executable
-        env = os.environ.copy()
-        env["DYLD_LIBRARY_PATH"] = _homebrew_lib
-        env["_WEASYPRINT_READY"] = "1"
-        # arch -arm64 erzwingt native ARM64-Ausführung (kein Rosetta-Erbe)
-        arch_cmd = shutil.which("arch")
-        cmd = ([arch_cmd, "-arm64", python] if arch_cmd else [python]) + sys.argv
-        result = subprocess.run(cmd, env=env)
-        sys.exit(result.returncode)
+# macOS: Architektur-Check und Homebrew-Libraries für WeasyPrint.
+# Python 3.7 (x86_64) ist inkompatibel mit den ARM64-Homebrew-Libraries.
+# → Klare Fehlermeldung statt kryptischem WeasyPrint-Absturz.
+if sys.platform == "darwin":
+    import platform as _platform
+    if _platform.machine() == "x86_64":
+        print("=" * 60)
+        print("FEHLER: Falscher Python-Interpreter")
+        print("=" * 60)
+        print(f"  Aktuell: {sys.executable}  ({sys.version})")
+        print()
+        print("  Python 3.7 (x86_64) ist nicht kompatibel mit den")
+        print("  ARM64-Homebrew-Bibliotheken, die WeasyPrint benötigt.")
+        print()
+        print("Lösung A – Terminal (empfohlen):")
+        print("  python3 Pflichtenheft/export_pdf.py")
+        print()
+        print("Lösung B – IDE-Interpreter ändern:")
+        print("  PyCharm: Preferences → Project → Python Interpreter")
+        print(f"  → /usr/local/bin/python3  (statt python3.7)")
+        print("=" * 60)
+        sys.exit(1)
+
+    # Homebrew-Libraries einbinden (DYLD_LIBRARY_PATH via subprocess-Neustart)
+    _homebrew_lib = "/opt/homebrew/lib"
+    if os.path.isdir(_homebrew_lib) and os.environ.get("_WEASYPRINT_READY") != "1":
+        import subprocess as _sp
+        _env = os.environ.copy()
+        _env["DYLD_LIBRARY_PATH"] = _homebrew_lib
+        _env["_WEASYPRINT_READY"] = "1"
+        _r = _sp.run([sys.executable] + sys.argv, env=_env)
+        sys.exit(_r.returncode)
 
 import markdown
 from weasyprint import HTML, CSS
