@@ -904,7 +904,7 @@ def main():
     database.init_db()
 
     root = tk.Tk()
-    root.title("HHBKTendo")
+    root.title("HHBKTendo-BlitzBoard")
     root.geometry("820x700")
     root.minsize(720, 600)
     root.configure(bg=COLORS["bg_dark"])
