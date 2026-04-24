@@ -3,7 +3,7 @@
 **Projekt:** Strategiespiele-Prototyp mit MiniMax-KI
 **Auftraggeber:** HHBK Tendo Research Center
 **Auftragnehmer:** Projektteam (Lernfeld 5)
-**Version:** 1.7
+**Version:** 2.0
 **Datum:** 2026-04-24
 **Status:** Entwurf
 
@@ -23,9 +23,9 @@
 10. [MiniMax-Algorithmus und Bewertungsfunktionen](#10-minimax-algorithmus-und-bewertungsfunktionen)
 11. [Testfälle und Abnahmekriterien](#11-testfälle-und-abnahmekriterien)
 12. [Dokumentations- und Konzeptanforderungen](#12-dokumentations--und-konzeptanforderungen)
-13. [Liefergegenstände](#13-liefergegenstände)
-14. [Projektplanung](#14-projektplanung)
-15. [Design und Corporate Identity](#15-design-und-corporate-identity)
+13. [Design und Corporate Identity](#13-design-und-corporate-identity)
+14. [Liefergegenstände](#14-liefergegenstände)
+15. [Projektplanung](#15-projektplanung)
 
 ---
 
@@ -212,40 +212,14 @@ Nur offene Linien (ohne gegnerische Steine im Fenster) werden gezählt.
 
 ### 4.3 KI-System (PF-M04)
 
-**MiniMax mit Alpha-Beta-Pruning:**
+Die KI verwendet den **MiniMax-Algorithmus mit Alpha-Beta-Pruning**. Algorithmus, Spielbaum, Pseudocode und die spielunabhängige Schnittstelle sind vollständig in **Abschnitt 10** dokumentiert.
 
-```
-minimax(board, depth, is_maximizing, α=−∞, β=+∞):
-    if terminal(board): return terminal_score
-    if depth == 0:      return evaluate(board)
+**Funktionale Anforderungen an das KI-System:**
 
-    if is_maximizing:
-        best = −∞
-        for move in get_moves(board, True):
-            score = minimax(apply(board, move), depth−1, False, α, β)
-            best = max(best, score); α = max(α, score)
-            if β ≤ α: break  # Beta-Pruning
-        return best
-    else:
-        best = +∞
-        for move in get_moves(board, False):
-            score = minimax(apply(board, move), depth−1, True, α, β)
-            best = min(best, score); β = min(β, score)
-            if β ≤ α: break  # Alpha-Pruning
-        return best
-```
-
-**Schwierigkeitsgrade:**
-
-| Level | Suchtiefe | Verhalten |
-|-------|-----------|-----------|
-| 1 – Leicht | 1 | Nur einen Zug voraus, kaum strategisch |
-| 2 – Mittel | 2 | Einfache Taktiken erkannt |
-| 3 – Schwer | 3 | Mittlere Planung (Standard) |
-| 4 – Experte | 4 | Starke KI, schwer zu schlagen |
-| 5 – Meister | 5 | Sehr starke KI, KI-Zug kann mehrere Sekunden dauern |
-
-**Zeitlimit:** KI-Zug läuft in eigenem Thread (max. 45 Sekunden, LN5010).
+- Fünf wählbare Schwierigkeitsgrade (Suchtiefe 1–5), einstellbar vor Spielbeginn (PF-M06)
+- KI-Zug wird in einem separaten Thread ausgeführt, um die GUI nicht zu blockieren (LN5010)
+- Maximale Berechnungszeit: 45 Sekunden pro Zug
+- Derselbe Algorithmus wird für alle Spiele verwendet (LN5040)
 
 ---
 
@@ -507,7 +481,21 @@ Der Minimizer kann bei Ast B höchstens +3 erzwingen – das ist schlechter als 
 
 Die hohen terminalen Werte (±1.000.000) stellen sicher, dass ein tatsächlicher Sieg oder eine Niederlage immer stärker gewichtet wird als jede heuristische Zwischenbewertung, unabhängig davon in welcher Suchtiefe das Spielende erreicht wird.
 
-### 10.7 Spielunabhängige Schnittstelle
+### 10.7 Schwierigkeitsgrade und Zeitverhalten
+
+Die Suchtiefe des Algorithmus ist direkt an den gewählten Schwierigkeitsgrad gekoppelt. Eine höhere Suchtiefe führt zu einer stärkeren, aber rechenintensiveren KI:
+
+| Level | Suchtiefe | Verhalten |
+|-------|-----------|-----------|
+| 1 – Leicht | 1 | Nur einen Zug voraus, kaum strategisch |
+| 2 – Mittel | 2 | Einfache Taktiken erkannt |
+| 3 – Schwer | 3 | Mittlere Planung (Standard) |
+| 4 – Experte | 4 | Starke KI, schwer zu schlagen |
+| 5 – Meister | 5 | Sehr starke KI, Zug kann mehrere Sekunden dauern |
+
+Der KI-Zug wird in einem separaten Thread ausgeführt (LN5010), damit die GUI während der Berechnung nicht einfriert. Das maximale Zeitlimit beträgt 45 Sekunden pro Zug.
+
+### 10.8 Spielunabhängige Schnittstelle
 
 Die Implementierung in `minimax.py` kennt keine spielspezifische Logik. Alle spielabhängigen Operationen werden als Callback-Funktionen übergeben:
 
@@ -600,52 +588,9 @@ Dieselbe KI-Engine wird dadurch für Bauernschach und Tic-Tac-Toe wiederverwende
 
 ---
 
-## 13 Liefergegenstände
+## 13 Design und Corporate Identity
 
-| # | Liefergegenstand | Verantwortlich |
-|---|-----------------|----------------|
-| 1 | Pflichtenheft (dieses Dokument) | Team |
-| 2 | Quellcode (alle .py-Dateien + games.db) | Entwickler |
-| 3 | Benutzerdokumentation (Installation, Start, Spielanleitung) – Anforderungen DOC-01 | Dokumentation |
-| 4 | Technische Dokumentation (Spielverhalten, Algorithmen, Architektur, globale Variablen) – Anforderungen DOC-02 bis DOC-05 | Entwickler |
-| 5 | Testprotokoll (TC-01 bis TC-15) | Test |
-| 6 | Abschlusspräsentation (SOLL/IST Features & Zeitplan, Softwarekomponenten, Quellen, Fazit) – Anforderungen DOC-06 bis DOC-10 | Team |
-| 7 | Konzept Corporate Identity & Branding (Design-Begründung, Mission/Vision) – Anforderung DOC-11 | Design |
-| 8 | Pitch-Deck (englischsprachig, Investoren-Argumentation) – Anforderung DOC-12 | Team |
-| 9 | Konzept Arbeitszeitgestaltung (Plan vs. IST, Risiken, Empfehlungen) – Anforderung DOC-13 | Projektleitung |
-
----
-
-## 14 Projektplanung
-
-### 14.1 Projektphasen (Wasserfallmodell)
-
-| Phase | Inhalt | Zeitraum              |
-|-------|--------|-----------------------|
-| Analysephase | Lastenheft lesen, Pflichtenheft erstellen, WBS, Zeitplan, Ressourcenplan | Woche 1 (Vollzeit)    |
-| Design & Implementierung | Architektur, Datenbankdesign, Spiellogik, MiniMax, GUI | Woche 2 (Vollzeit)    |
-| Test | Testprotokoll, Bugfixes, Abnahmetests | Woche 2 (Mitte + Ende) |
-| Dokumentation | Benutzerdokumentation, Technische Doku, Präsentation, Pitch, CI-Konzept | Woche 2 (Ende)        |
-| Abschluss | Live-Demo, Präsentation, Fachgespräch (ca. 20+10 min) | Woche 3 (letzter Tag) |
-
-### 14.2 Offene Punkte
-
-| # | Offener Punkt | Referenz | Status |
-|---|---------------|----------|--------|
-| 1 | Dame als drittes Spiel implementieren | PF-K03 | Optional / zeitabhängig |
-| 2 | Alternative KI-Schnittstelle definieren und implementieren | PF-K04 | Optional / zeitabhängig |
-| 3 | Testprotokoll-Dokument erstellen und ausfüllen | TC-01–TC-15 | Ausstehend |
-| 4 | Benutzerdokumentation schreiben | DOC-01 | Ausstehend |
-| 5 | Technische Dokumentation vervollständigen | DOC-02–DOC-05 | Ausstehend |
-| 6 | CI/Branding-Konzept (inkl. Mission/Vision) erstellen | DOC-11 | Ausstehend |
-| 7 | Englischsprachigen Pitch erarbeiten | DOC-12 | Ausstehend |
-| 8 | Konzept Arbeitszeitgestaltung ausarbeiten | DOC-13 | Ausstehend |
-
----
-
-## 15 Design und Corporate Identity
-
-### 15.1 Markenidentität (Brand Identity)
+### 13.1 Markenidentität (Brand Identity)
 
 HHBKTendo positioniert sich als modernes, technologiegetriebenes Spielestudio mit einem klaren Fokus auf algorithmische KI. Das visuelle Erscheinungsbild soll diesen Anspruch transportieren: **präzise, dunkel, modern** – wie die Oberfläche eines High-End-Gaming-Setups. Die Farbwelt orientiert sich bewusst an professioneller Gaming-Ästhetik und hebt sich damit von den pastelligen UI-Konventionen klassischer Business-Software ab.
 
@@ -655,7 +600,7 @@ HHBKTendo positioniert sich als modernes, technologiegetriebenes Spielestudio mi
 
 ---
 
-### 15.2 Farbpalette
+### 13.2 Farbpalette
 
 Die gesamte Farbwelt folgt dem offiziellen **HHBKTendo Design System (Investor Edition)**. Jede Farbe hat eine definierte semantische Rolle und einen CSS-Token-Namen sowie eine korrespondierende Python-Variable.
 
@@ -684,14 +629,14 @@ Die gesamte Farbwelt folgt dem offiziellen **HHBKTendo Design System (Investor E
 
 ---
 
-### 15.2.1 Darkmode - Funktion
+### 13.2.1 Darkmode - Funktion
 
 ### Anforderungen
 - Umschaltbar (Light/Dark)
 - Speicherung der Auswahl
 - Systemeinstellung berücksichtigen
 
-### 15.3 Typografie
+### 13.3 Typografie
 
 Das Design System definiert zwei Schriftfamilien mit unterschiedlichen Einsatzbereichen:
 
@@ -716,11 +661,11 @@ Orbitron und Exo 2 sind als Google Fonts frei verfügbar. Im tkinter-Fallback (k
 
 ---
 
-### 15.4 UI-Mockups
+### 13.4 UI-Mockups
 
-Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenzen beziehen sich auf die Palette aus Abschnitt 15.2.
+Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenzen beziehen sich auf die Palette aus Abschnitt 13.2.
 
-#### 15.4.1 Login-Screen
+#### 13.4.1 Login-Screen
 
 ```
 ┌─────────────────────────────────────────────┐  bg-deep #0d0f1a
@@ -755,7 +700,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 └─────────────────────────────────────────────┘
 ```
 
-#### 15.4.2 Hauptmenü
+#### 13.4.2 Hauptmenü
 
 ```
 ┌─────────────────────────────────────────────────────────────┐  bg-deep #0d0f1a
@@ -784,7 +729,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 └─────────────────────────────────────────────────────────────┘
 ```
 
-#### 15.4.3 Spielscreen – Bauernschach
+#### 13.4.3 Spielscreen – Bauernschach
 
 ```
 ┌─────────────────────────────────────────────────────────────┐  bg-deep #0d0f1a
@@ -810,7 +755,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 └─────────────────────────────────────────────────────────────┘
 ```
 
-#### 15.4.4 Spielscreen – Tic-Tac-Toe (4 gewinnt)
+#### 13.4.4 Spielscreen – Tic-Tac-Toe (4 gewinnt)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐  bg-deep #0d0f1a
@@ -835,7 +780,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 └─────────────────────────────────────────────────────────────┘
 ```
 
-#### 15.4.5 Ergebnis-Overlay (Spielende)
+#### 13.4.5 Ergebnis-Overlay (Spielende)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -856,7 +801,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
                   Draw!     → #ff9800 (Orange)
 ```
 
-#### 15.4.6 Bestenliste (Popup)
+#### 13.4.6 Bestenliste (Popup)
 
 ```
 ┌─────────────────────────────────────────┐  bg-deep #0d0f1a
@@ -880,7 +825,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 
 ---
 
-### 15.5 Design Tokens
+### 13.5 Design Tokens
 
 #### Border Radius
 
@@ -905,7 +850,7 @@ Die folgenden Mockups zeigen den finalen Screenfluss der Anwendung. Farbreferenz
 
 ---
 
-### 15.6 Glow & Effekte
+### 13.6 Glow & Effekte
 
 Leuchtende Akzente (Glow) verstärken das Gaming-Feeling und heben interaktive Elemente hervor.
 
@@ -919,7 +864,7 @@ In tkinter werden Glow-Effekte durch Rahmenfarbe (`highlightbackground`) und lei
 
 ---
 
-### 15.7 Python Code-Export
+### 13.7 Python Code-Export
 
 Offizielle Token-Konstanten für die Implementierung in `main.py`:
 
@@ -940,7 +885,7 @@ TEXT_MUTED     = "#4a5680"   #            – Dezenter Text, Hints
 
 ---
 
-### 15.8 Designprinzipien
+### 13.8 Designprinzipien
 
 | Prinzip | Umsetzung |
 |---------|-----------|
@@ -953,11 +898,11 @@ TEXT_MUTED     = "#4a5680"   #            – Dezenter Text, Hints
 
 ---
 
-### 15.9 CI-Konzept
+### 13.9 CI-Konzept
 
 ---
 
-#### 15.9.1 Name und Beschreibung der Marke
+#### 13.9.1 Name und Beschreibung der Marke
 
 **Markenname: HHBKTendo**
 
@@ -968,31 +913,40 @@ Der Name ist eine direkte Zusammensetzung aus zwei Teilen:
 
 Zusammen ergibt **HHBKTendo** eine Marke, die schulische Identität mit Gaming-Kultur verbindet: verwurzelt im Bildungskontext, positioniert im Spielemarkt.
 
-Der Produktname der App lautet **BlitzBoard** – ein Titel, der Geschwindigkeit (*Blitz*) mit dem klassischen Brettspiel-Format (*Board*) verbindet. Er kommuniziert: Hier kommt man schnell rein, spielt sofort, ohne Hürden. Der Produktname wird im Investor-Pitch und im Marketing-Kontext verwendet; in der Anwendung selbst tritt der Markenname HHBKTendo in den Vordergrund.
+Der Produktname der App lautet **BlitzBoard** – ein Titel, der Geschwindigkeit (*Blitz*) mit dem klassischen Brettspiel-Format (*Board*) verbindet. Das Wort *Blitz* steht dabei zugleich für das zentrale Markenversprechen: sofortiger Spieleinstieg, ohne Umwege. BlitzBoard macht klassische Zwei-Spieler-Brettspiele wie Bauernschach und Tic-Tac-Toe digital erlebbar – für Familien und junge Leute, die gemeinsam Spaß haben wollen. Der Produktname wird im Investor-Pitch und im Marketing-Kontext verwendet; in der Anwendung selbst tritt der Markenname HHBKTendo in den Vordergrund.
 
 ---
 
-#### 15.9.2 Mission Statement
+#### 13.9.2 Mission Statement
 
-> **HHBKTendo stellt klassische Strategiespiele mit echter KI-Herausforderung kostenlos bereit und macht taktisches Spielen für jeden zugänglich – ohne Wartezeiten, ohne Einstiegshürden, ohne Kompromisse beim Spielerlebnis.**
+> **HHBKTendo bietet spaßige und unterhaltende Brettspielklassiker direkt für Endnutzerinnen und Endnutzer (B2C) – einfach zugänglich, modern umgesetzt und stets mit einem Lächeln. Klassische Strategiespiele mit echter KI-Herausforderung werden kostenlos bereitgestellt: ohne Wartezeiten, ohne Einstiegshürden, ohne Kompromisse beim Spielerlebnis.**
 
-Die Mission adressiert ein klar identifiziertes Problem: Langeweile ist universell. Schülerinnen und Schüler in Freistunden, Patientinnen und Patienten in Kliniken, Pendlerinnen und Pendler im Nahverkehr – alle haben ungenutzte Zeit, aber kaum Zugang zu qualitativ hochwertiger, kostenloser Unterhaltung ohne Ablenkungs-Mechanismen (Werbung, In-App-Käufe, Abonnementzwang). HHBKTendo schließt diese Lücke mit einem klaren Grundsatz: *Wer spielen will, spielt – sofort und ohne Schranken.*
+Die Mission adressiert ein klar identifiziertes Problem: Langeweile ist universell. Schülerinnen und Schüler in Freistunden, Patientinnen und Patienten in Kliniken, Pendlerinnen und Pendler im Nahverkehr – alle haben ungenutzte Zeit, aber kaum Zugang zu qualitativ hochwertiger, kostenloser Unterhaltung ohne Ablenkungs-Mechanismen (Werbung, In-App-Käufe, Abonnementzwang). HHBKTendo schließt diese Lücke mit einem klaren Grundsatz: *Wer spielen will, spielt – sofort, kostenlos und ohne Schranken.*
 
 ---
 
-#### 15.9.3 Vision Statement
+#### 13.9.3 Vision Statement
 
-> **HHBKTendo wird die führende Plattform für algorithmisch gestützte Einzelspieler-Brettspiele – mit einer wachsenden Spielbibliothek, Partnerschaften mit Schulen und sozialen Einrichtungen sowie einer Community, die klassische Strategiespiele für das digitale Zeitalter neu entdeckt.**
+> **HHBKTendo wird die beste digitale Brettspielmarke Deutschlands – und macht Familien weltweit die schönsten Brettspielklassiker aller Kulturen digital zugänglich: mit einer wachsenden Spielbibliothek, Partnerschaften mit Schulen und sozialen Einrichtungen sowie einer Community, die klassische Strategiespiele für das digitale Zeitalter neu entdeckt.**
 
-Mittelfristig (6–18 Monate): Erweiterung der Spielbibliothek um Dame und weitere Klassiker, Einführung eines Cosmetics-Shops (Skins & Boards) sowie aktive Kooperationen mit Schulen und Kliniken.
+Mittelfristig (6–18 Monate): Erweiterung der Spielbibliothek um Dame und weitere Klassiker aus verschiedenen Kulturen, Einführung eines Cosmetics-Shops (Skins & Boards) sowie aktive Kooperationen mit Schulen und Kliniken.
 
 Langfristig (2–5 Jahre): Positionierung als meistgenutzte kostenlose Brettspiel-App im deutschsprachigen Raum, Expansion in internationale Märkte (UK, Singapur, USA, Hongkong) und Aufbau eines B2B-Lizenzmodells für Marken-Kollaborationen.
 
+**Strategische Wettbewerbsvorteile (aus Investor-Pitch):**
+
+| Faktor | Beschreibung |
+|--------|-------------|
+| Hohe Update-Frequenz | Neue Spiele erscheinen regelmäßig – Nutzende haben stets einen Grund zurückzukehren |
+| Klare Roadmap | Dame, Checkers, vollständiger Shop – Investoren und Nutzende sehen, wohin die Reise geht |
+| Kollaborationspotenzial | Marken-Kooperationen (Skins & Boards) eröffnen einen B2B-Umsatzkanal ohne zusätzlichen Entwicklungsaufwand |
+| Community-First | Kostenloser Zugang und Klinikpartnerschaften bauen eine loyale Nutzerbasis auf, die als organischer Marketing-Kanal wirkt |
+
 ---
 
-#### 15.9.4 Sprachstil und Kommunikation der Marke
+#### 13.9.4 Sprachstil und Kommunikation der Marke
 
-**Tonalität:** Modern, direkt, spielerisch – aber nie kindisch. HHBKTendo spricht die Nutzenden wie gleichwertige Gesprächspartner an: respektvoll, knapp, auf den Punkt.
+**Tonalität:** Modern, jugendlich und direkt – locker, energetisch, einladend, aber nie kindisch. HHBKTendo spricht die Nutzenden wie gleichwertige Gesprächspartner an: respektvoll, knapp, auf den Punkt. Die Ansprache erfolgt in der Du-Form, um Nähe und niedrige Hemmschwelle zu vermitteln.
 
 **Grundprinzipien des Sprachstils:**
 
@@ -1003,11 +957,16 @@ Langfristig (2–5 Jahre): Positionierung als meistgenutzte kostenlose Brettspie
 | Motivierend, nicht bevormundend | „AI is thinking..." | „KI denkt nach..." |
 | Fehlermeldungen ohne Schuldzuweisung | „Username already taken." | „Benutzername vergeben." |
 
-**Slogan / Motto:**
+**Slogans / Mottos:**
 
-> *„Classic Games. Real Intelligence."*
+Die Marke verfügt über zwei komplementäre Slogans für unterschiedliche Kommunikationskontexte:
 
-Der Slogan benennt beide Kernversprechen der Marke in drei Wörtern: das vertraute Spielformat (*Classic Games*) und die technologische Besonderheit (*Real Intelligence* – echter MiniMax-Algorithmus, keine Zufalls-KI). Er funktioniert auf Englisch als internationale Investorenansprache und als UI-Tagline auf dem Startscreen.
+> **(DE) „Spiele, die schlau machen."**
+> **(EN) „Classic Games. Real Intelligence."**
+
+Der deutsche Slogan *„Spiele, die schlau machen."* spricht die Kernzielgruppe (Familien, Schülerinnen und Schüler) direkt an: Er verspricht Unterhaltung mit echtem kognitivem Mehrwert. Die Formulierung ist niedrigschwellig, einprägsam und transportiert den Bildungsanspruch ohne belehrend zu wirken.
+
+Der englische Slogan *„Classic Games. Real Intelligence."* richtet sich an internationale Märkte und Investoren: Er benennt das vertraute Spielformat (*Classic Games*) und die technologische Besonderheit (*Real Intelligence* – echter MiniMax-Algorithmus, keine Zufalls-KI) in vier Wörtern. Er fungiert als UI-Tagline auf dem Startscreen und im Pitch-Deck.
 
 **Sprachliche Elemente im GUI:**
 
@@ -1027,7 +986,7 @@ Die Sprache ist bewusst zweisprachig gehalten (EN Standard, DE optional): Dies s
 
 ---
 
-#### 15.9.5 Design-Elemente – konzeptionelle Begründung
+#### 13.9.5 Design-Elemente – konzeptionelle Begründung
 
 Das HHBKTendo Design System ist kein dekoratives Add-on, sondern die visuelle Übersetzung von Mission und Vision. Jede Designentscheidung ist semantisch begründet:
 
@@ -1042,7 +1001,19 @@ Das HHBKTendo Design System ist kein dekoratives Add-on, sondern die visuelle Ü
 | White | `#ffffff` | Klarheit, Lesbarkeit | Primärtext – maximaler Kontrast auf dunklem Grund |
 | Slate Blue | `#8a9cc0` | Neutralität, Dezenz | Sekundärtext – Statuszeilen, Hinweise, ohne zu stören |
 
-Die Farbkombination Deep Navy + Hot Pink + Cyber Cyan ist kein Zufall: Sie positioniert HHBKTendo visuell exakt zwischen *seriösem Technologieprodukt* (dunkles Schema, klare Typografie) und *Gaming-Produkt* (leuchtende Akzente, Glow-Effekte). Diese Balance ist entscheidend für die Glaubwürdigkeit bei der Zielgruppe.
+**Konzeptioneller Ursprung der Farbwahl – 2-Player-Teamfarben:**
+
+Die ursprüngliche Farbidee für BlitzBoard basiert auf dem klassischen Prinzip der Teamfarben: **Blau** und **Rot** als die zwei gegnerischen Seiten, die in jedem Zwei-Spieler-Spiel aufeinanderprallen. Blau und Rot sind kulturübergreifend als Kontrastpaar bekannt (Sport, Schach, Politik) und erzeugen sofort eine sportlich-dynamische Atmosphäre, die den Wettbewerbsgedanken transportiert.
+
+Im finalen Design-System wurde dieses Konzept in die HHBKTendo-Palette überführt und verfeinert:
+
+| Konzept | Ursprungsidee | Finale Umsetzung |
+|---------|--------------|------------------|
+| Spieler 1 (Mensch) | Blau 🔵 | Cyber Cyan `#00d4ff` – kühler, präziser Blauton |
+| Spieler 2 (KI) | Rot 🔴 | Hot Pink `#e8365d` – aggressiver, warmer Rotton |
+| Hintergrund | Dunkel, neutral | Deep Navy `#0d0f1a` – maximaler Kontrast, Gaming-Ästhetik |
+
+Die Farbkombination Deep Navy + Hot Pink + Cyber Cyan positioniert HHBKTendo visuell exakt zwischen *seriösem Technologieprodukt* (dunkles Schema, klare Typografie) und *Gaming-Produkt* (leuchtende Akzente, Glow-Effekte). Die 2-Player-Logik der Ursprungsfarben bleibt dabei erhalten: Im Tic-Tac-Toe-Spielfeld repräsentiert Cyan das X des menschlichen Spielers, Hot Pink das O der KI – Blau gegen Rot, technisch verfeinert.
 
 **Typografie:**
 
@@ -1051,21 +1022,38 @@ Die Farbkombination Deep Navy + Hot Pink + Cyber Cyan ist kein Zufall: Sie posit
 | Orbitron (Display) | Logo, Überschriften | Geometrisch, futuristisch, tech-orientiert – kommuniziert sofort: das ist ein modernes Produkt mit algorithmischem Anspruch |
 | Exo 2 (Body) | Buttons, Labels, Fließtext | Humanistisch, sehr lesbar auch bei kleinen Größen – schafft Nähe und Zugänglichkeit gegenüber der technischen Strenge von Orbitron |
 
+Als alternative serifenlose Schriften wurden Inter, Montserrat und Poppins evaluiert. Orbitron und Exo 2 wurden gewählt, da sie den Gaming-Charakter der Marke stärker transportieren als die neutraleren Alternativen, ohne die Lesbarkeit zu beeinträchtigen.
+
 Die Kombination aus einem Display-Font mit technischem Charakter (Orbitron) und einem lesbaren Body-Font (Exo 2) spiegelt die Markenidentität direkt wider: anspruchsvoll in der KI, zugänglich im Spielerlebnis.
 
-**Formen und Symbole:**
+**Formensprache:**
 
-- **Schachfiguren ♙ ♟** als primäre Spielsymbole: universell bekannt, kulturell neutral, sofort verständlich.
-- **Glow-Effekte** (`box-shadow: 0 0 24px`) auf interaktiven Elementen: simulieren das physische Leuchten eines Gaming-Monitors und erzeugen ein Premium-Gefühl, das über die tatsächliche Preisklasse der App hinausgeht.
-- **Scharfe Kanten (0 px Radius) am Spielfeld**, abgerundete Kanten (6–12 px) an Buttons und Karten: Das Spielfeld ist Präzisionsraum, Buttons sind einladend.
+Das Design-System kombiniert bewusst zwei gegensätzliche Formsprachen, die jeweils unterschiedliche emotionale Signale senden:
+
+| Formtyp | Einsatz | Wirkung |
+|---------|---------|---------|
+| **Weiche, runde Formen** (Radius 6–20 px) | Buttons, Karten, Dialoge | Ruhe, Einladung, Spaß – signalisiert: hier kann man entspannt interagieren |
+| **Harte, scharfe Formen** (Radius 0 px) | Spielfeld-Zellen | Spannung, Präzision, Wettbewerb – signalisiert: hier zählt jeder Zug |
+
+Die Kombination beider Stile erzeugt eine ausgewogene, dynamische Optik: Die Anwendung fühlt sich einladend an (runde UI-Elemente), ohne die strategische Ernsthaftigkeit des Spiels zu untergraben (scharfes Spielfeld).
+
+**Symbole und Ikonografie:**
+
+| Symbol | Bedeutung | Einsatz |
+|--------|-----------|---------|
+| ⚡ Blitz | Energie, Schnelligkeit, Wettkampf | Produktname BlitzBoard; steht für sofortigen Spieleinstieg |
+| 🎲 Brett / ♙ ♟ | Klassik, Strategie, Tradition | Spielfiguren und Spielfeld; universell bekannte Symbole |
+| 🎮 Gamepad | Digitalität, moderne Gaming-Kultur | Positionierung als digitales Produkt, nicht als physisches Brettspiel |
+
+Die drei Symbole bilden zusammen die Markenerzählung: *Blitz* (sofort, energetisch) + *Brett* (klassisch, strategisch) + *Gamepad* (digital, modern) = HHBKTendo.
 
 **Verbindung zu Mission und Vision:**
 
-Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – passend zur Mission, taktisches Spielen ohne Kompromisse anzubieten. Die leuchtenden Akzentfarben erzeugen trotzdem Lebendigkeit und signalisieren: das hier ist kein trockenes Bildungstool, sondern echtes Gaming. Diese Spannung ist die visuelle Essenz von HHBKTendo.
+Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – passend zur Mission, spaßige und unterhaltende Spielklassiker ohne Kompromisse anzubieten. Die leuchtenden Akzentfarben erzeugen dabei Lebendigkeit und signalisieren: das hier ist kein trockenes Bildungstool, sondern echtes Gaming. Die Formensprache (rund = einladend, scharf = Wettkampf) und die Symbole (Blitz, Brett, Gamepad) verstärken diesen Anspruch auf jeder Ebene der Benutzeroberfläche.
 
 ---
 
-#### 15.9.6 Zielgruppenbezug
+#### 13.9.6 Zielgruppenbezug
 
 **Primäre Zielgruppen (aus Investor-Pitch):**
 
@@ -1088,9 +1076,20 @@ Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – pas
 3. **Zugänglichkeit**: Exo 2 als Lesetext, klare Kontraste und kurze Statusmeldungen stellen sicher, dass die App auch für weniger technikaffine Zielgruppen sofort bedienbar ist.
 4. **Kostenlosigkeit ohne Qualitätsverlust**: Die visuelle Qualität des Design Systems (Glow-Effekte, professionelle Typografie, konsistente Farbpalette) widerlegt das Vorurteil, kostenlose Apps sähen minderwertig aus. HHBKTendo sieht aus wie ein Premium-Produkt – und ist kostenlos. Das ist das stärkste Marketing-Signal.
 
+**Geschäftsmodell und CI-Strategie (aus Investor-Pitch):**
+
+Das Geschäftsmodell von BlitzBoard ist direkt mit der CI verzahnt: Der kostenlose Einstieg ist kein Kompromiss, sondern das stärkste CI-Signal. Die Preisstruktur unterstreicht das Markenversprechen auf jeder Ebene:
+
+| Tier | Preis | CI-Botschaft |
+|------|-------|-------------|
+| Free | kostenlos | „Jeder kann spielen" – Mission in Reinform |
+| Premium Monthly | €0,99 / Monat | Qualität hat einen fairen Preis |
+| Premium Lifetime | €5 einmalig | Langfristige Beziehung statt Abofrustration |
+| À la Carte (Skins & Boards) | €0,99–€2,99 | Personalisierung ohne Zwang |
+
 **Zusammenfassung CI-Wirkung:**
 
-> Die Corporate Identity von HHBKTendo kommuniziert in einem Blick: *Modernes Gaming-Studio, echte KI, keine Kompromisse – für alle.* Die Farbwelt, die Typografie und der Sprachstil greifen ineinander, um genau die Nutzenden anzusprechen, die bisher von spielelastigen, werbegetriebenen Apps abgeschreckt wurden: junge Menschen, Familien und Institutionen, die Qualität erwarten, aber keine Preisschilder bezahlen können.
+> Die Corporate Identity von HHBKTendo kommuniziert in einem Blick: *Moderne digitale Brettspielmarke, echte KI, Spaß für alle – ohne Schranken.* Die Farbwelt (2-Player-Teamfarben, Gaming-Ästhetik), die Typografie (tech-orientiert + lesbar), die Formensprache (einladend + präzise), die Symbolik (Blitz, Brett, Gamepad) und der Sprachstil (jugendlich, direkt, zweisprachig) greifen ineinander, um genau die Nutzenden anzusprechen, die bisher von werbefinanzierten, komplexen oder teuren Apps abgeschreckt wurden: junge Menschen, Familien und Institutionen, die Qualität erwarten, aber keine hohen Preise bezahlen können oder wollen.
 
 ---
 
@@ -1099,10 +1098,56 @@ Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – pas
 | 1.0 | 2026-04-20 | Erstversion |
 | 1.1 | 2026-04-21 | Tic-Tac-Toe zwischenzeitlich auf 3×3 geändert; NF-09 (macOS-Kompatibilität) ergänzt |
 | 1.2 | 2026-04-21 | Tic-Tac-Toe gemäß Lastenheft (LF4020) auf 6×6 / 4 in einer Reihe zurückgesetzt; PF-M03, Abschnitt 4.2, Bewertungsfunktion, TC-09–TC-11 wiederhergestellt |
-| 1.3 | 2026-04-22 | Abgleich mit Lastenheft: PF-K03 (Dame) und PF-K04 (alternative KI-Schnittstelle) als Kann-Ziele ergänzt; neuer Abschnitt 12 mit Dokumentations- und Konzeptanforderungen (DOC-01–DOC-13) aus LD5100–LD5500; Abschnitt 14.2 Offene Punkte erweitert; Liefergegenstände mit Anforderungsreferenzen verknüpft |
+| 1.3 | 2026-04-22 | Abgleich mit Lastenheft: PF-K03 (Dame) und PF-K04 (alternative KI-Schnittstelle) als Kann-Ziele ergänzt; neuer Abschnitt 12 mit Dokumentations- und Konzeptanforderungen (DOC-01–DOC-13) aus LD5100–LD5500; Abschnitt 15.2 Offene Punkte erweitert; Liefergegenstände mit Anforderungsreferenzen verknüpft |
 | 1.4 | 2026-04-22 | Neuer Abschnitt 15: Design und Corporate Identity – Farbpalette mit Begründungen, Typografie, Designprinzipien und ASCII-Mockups aller sechs Hauptscreens (Login, Menü, Bauernschach, Tic-Tac-Toe, Ergebnis-Overlay, Bestenliste) |
 | 1.5 | 2026-04-22 | Abschnitt 15 auf offizielles HHBKTendo Design System (Investor Edition) aktualisiert: Farbpalette auf 9 PDF-Tokens (Deep Navy, Card Navy, Mid Navy, Hot Pink, Royal Purple, Cyber Cyan, White, Slate Blue, Muted) umgestellt; Typografie von Segoe UI auf Orbitron (Display) + Exo 2 (Body) umgestellt; neue Abschnitte 15.5 Design Tokens (Radius/Spacing), 15.6 Glow & Effekte, 15.7 Python Code-Export ergänzt; alle Mockup-Farbannotationen aktualisiert |
-| 1.7 | 2026-04-24 | Abschnitt 10 (MiniMax) vollständig überarbeitet und erweitert: Grundprinzip, Spielbaum-Visualisierung, rekursiver Ablauf (Pseudocode für Maximizer und Minimizer), erweitertes Illustrationsdiagramm mit Begründung, Alpha-Beta-Pruning mit Beispiel und Komplexitätsangabe, spielunabhängige Schnittstelle dokumentiert |
-| 1.6 | 2026-04-24 | Neuer Abschnitt 15.9 CI-Konzept vollständig ergänzt (CI_addon.md): Name & Markenbeschreibung (HHBKTendo + BlitzBoard), Mission Statement, Vision Statement, Sprachstil & Kommunikation (Tonalität, Slogan, GUI-Texttabelle), konzeptionelle Begründung der Design-Elemente (Farbe, Typografie, Formen), Zielgruppenbezug mit Marktdaten aus dem Blitzboard Investor-Pitch |
+| 1.6 | 2026-04-24 | Neuer Abschnitt CI-Konzept vollständig ergänzt (CI_addon.md): Name & Markenbeschreibung (HHBKTendo + BlitzBoard), Mission Statement, Vision Statement, Sprachstil & Kommunikation (Tonalität, Slogan, GUI-Texttabelle), konzeptionelle Begründung der Design-Elemente (Farbe, Typografie, Formen), Zielgruppenbezug mit Marktdaten aus dem Blitzboard Investor-Pitch |
+| 1.7 | 2026-04-24 | Abschnitt MiniMax vollständig überarbeitet und erweitert: Grundprinzip, Spielbaum-Visualisierung, rekursiver Ablauf (Pseudocode für Maximizer und Minimizer), erweitertes Illustrationsdiagramm mit Begründung, Alpha-Beta-Pruning mit Beispiel und Komplexitätsangabe, spielunabhängige Schnittstelle dokumentiert |
+| 1.8 | 2026-04-24 | CI-Konzept mit CI_ideas.md und Blitzboard_Pitch erweitert: BlitzBoard-Beschreibung als 2-Player-App für Familien ergänzt; Mission um B2C-Fokus und Tonalität ("mit einem Lächeln") angereichert; Vision um "aller Kulturen" und strategische Wettbewerbsvorteile (4 Pitch-Faktoren) erweitert; Sprachstil um "jugendlich", Du-Ansprache und deutschen Slogan "Spiele, die schlau machen." ergänzt; Design-Elemente um 2-Player-Farbursprung (Blau/Rot), Inter/Montserrat/Poppins als evaluierte Alternativen, Formensprache-Tabelle (rund/scharf) und Symbolik-Tabelle (⚡🎲🎮) erweitert; Zielgruppe um Geschäftsmodell-Tabelle und überarbeitete CI-Wirkungszusammenfassung ergänzt |
+| 1.9 | 2026-04-24 | Abschnitte 4.3 und 10 zusammengeführt: 4.3 auf funktionale Anforderungen + Querverweis zu Abschnitt 10 reduziert; Schwierigkeitsgrade-Tabelle und Zeitlimit in neuen Abschnitt 10.7 verschoben; 10.8 (ehemals 10.7) Spielunabhängige Schnittstelle umnummeriert |
+| 2.0 | 2026-04-24 | Abschnitt Design & CI vor Liefergegenstände verschoben; Abschnitte umnummeriert: Design → 13, Liefergegenstände → 14, Projektplanung → 15; Inhaltsverzeichnis und alle Querverweise aktualisiert; Changelog in korrekte aufsteigende Reihenfolge gebracht |
 
 *Pflichtenheft erstellt auf Basis des Lastenhefts Strategiespiele V13a, HHBK Tendo Research Center, 2026.*
+## 14 Liefergegenstände
+
+| # | Liefergegenstand | Verantwortlich |
+|---|-----------------|----------------|
+| 1 | Pflichtenheft (dieses Dokument) | Team |
+| 2 | Quellcode (alle .py-Dateien + games.db) | Entwickler |
+| 3 | Benutzerdokumentation (Installation, Start, Spielanleitung) – Anforderungen DOC-01 | Dokumentation |
+| 4 | Technische Dokumentation (Spielverhalten, Algorithmen, Architektur, globale Variablen) – Anforderungen DOC-02 bis DOC-05 | Entwickler |
+| 5 | Testprotokoll (TC-01 bis TC-15) | Test |
+| 6 | Abschlusspräsentation (SOLL/IST Features & Zeitplan, Softwarekomponenten, Quellen, Fazit) – Anforderungen DOC-06 bis DOC-10 | Team |
+| 7 | Konzept Corporate Identity & Branding (Design-Begründung, Mission/Vision) – Anforderung DOC-11 | Design |
+| 8 | Pitch-Deck (englischsprachig, Investoren-Argumentation) – Anforderung DOC-12 | Team |
+| 9 | Konzept Arbeitszeitgestaltung (Plan vs. IST, Risiken, Empfehlungen) – Anforderung DOC-13 | Projektleitung |
+
+---
+
+## 15 Projektplanung
+
+### 15.1 Projektphasen (Wasserfallmodell)
+
+| Phase | Inhalt | Zeitraum              |
+|-------|--------|-----------------------|
+| Analysephase | Lastenheft lesen, Pflichtenheft erstellen, WBS, Zeitplan, Ressourcenplan | Woche 1 (Vollzeit)    |
+| Design & Implementierung | Architektur, Datenbankdesign, Spiellogik, MiniMax, GUI | Woche 2 (Vollzeit)    |
+| Test | Testprotokoll, Bugfixes, Abnahmetests | Woche 2 (Mitte + Ende) |
+| Dokumentation | Benutzerdokumentation, Technische Doku, Präsentation, Pitch, CI-Konzept | Woche 2 (Ende)        |
+| Abschluss | Live-Demo, Präsentation, Fachgespräch (ca. 20+10 min) | Woche 3 (letzter Tag) |
+
+### 15.2 Offene Punkte
+
+| # | Offener Punkt | Referenz | Status |
+|---|---------------|----------|--------|
+| 1 | Dame als drittes Spiel implementieren | PF-K03 | Optional / zeitabhängig |
+| 2 | Alternative KI-Schnittstelle definieren und implementieren | PF-K04 | Optional / zeitabhängig |
+| 3 | Testprotokoll-Dokument erstellen und ausfüllen | TC-01–TC-15 | Ausstehend |
+| 4 | Benutzerdokumentation schreiben | DOC-01 | Ausstehend |
+| 5 | Technische Dokumentation vervollständigen | DOC-02–DOC-05 | Ausstehend |
+| 6 | CI/Branding-Konzept (inkl. Mission/Vision) erstellen | DOC-11 | Ausstehend |
+| 7 | Englischsprachigen Pitch erarbeiten | DOC-12 | Ausstehend |
+| 8 | Konzept Arbeitszeitgestaltung ausarbeiten | DOC-13 | Ausstehend |
+
+---
+
