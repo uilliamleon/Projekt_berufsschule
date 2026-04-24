@@ -25,6 +25,17 @@ MD_FILE  = os.path.join(BASE_DIR, "Pflichtenheft_HHBKTendo.md")
 PDF_FILE = os.path.join(BASE_DIR, "Pflichtenheft_HHBKTendo.pdf")
 
 # ---------------------------------------------------------------------------
+# Projektteam – Namen hier eintragen
+# ---------------------------------------------------------------------------
+TEAM_MEMBERS = [
+    "Jamie Augustin",
+    "Jesse Göllner",
+    "Niklas Pingel",
+    "Jakub Krause",
+    "Arda Dinda",
+]
+
+# ---------------------------------------------------------------------------
 # Markdown lesen und konvertieren
 # ---------------------------------------------------------------------------
 with open(MD_FILE, encoding="utf-8") as f:
@@ -135,6 +146,13 @@ html, body {
     height: 2px;
     background: #6c3fc5;
     margin: 0.8cm auto;
+}
+
+.cover .team {
+    font-size: 11pt;
+    color: #c0c8e8;
+    line-height: 1.9;
+    margin: 0.6cm 0 0 0;
 }
 
 /* ── Inhalt ─────────────────────────────────────────────────── */
@@ -311,6 +329,9 @@ all_versions = re.findall(r"\|\s*([\d.]+)\s*\|\s*(\d{4}-\d{2}-\d{2})", md_text)
 if all_versions:
     version, date = all_versions[-1]
 
+sorted_members = sorted(TEAM_MEMBERS, key=lambda name: name.split()[-1].lower())
+team_html = "<br>".join(sorted_members) if sorted_members else ""
+
 cover_html = f"""
 <div class="cover">
     <h1>HHBKTendo</h1>
@@ -321,6 +342,7 @@ cover_html = f"""
         HHBKTendo Research Center · 2026<br>
         Strategiespiele mit MiniMax-KI (Bauernschach &amp; Tic-Tac-Toe)
     </p>
+    {f'<p class="team">{team_html}</p>' if team_html else ""}
     <span class="version-badge">Version {version}</span>
 </div>
 """

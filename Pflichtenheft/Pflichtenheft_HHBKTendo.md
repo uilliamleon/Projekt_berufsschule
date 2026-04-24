@@ -3,8 +3,8 @@
 **Projekt:** Strategiespiele-Prototyp mit MiniMax-KI
 **Auftraggeber:** HHBK Tendo Research Center
 **Auftragnehmer:** Projektteam (Lernfeld 5)
-**Version:** 1.4
-**Datum:** 2026-04-22
+**Version:** 1.6
+**Datum:** 2026-04-24
 **Status:** Entwurf
 
 ---
@@ -867,6 +867,147 @@ TEXT_MUTED     = "#4a5680"   #            – Dezenter Text, Hints
 
 ---
 
+### 15.9 CI-Konzept
+
+---
+
+#### 15.9.1 Name und Beschreibung der Marke
+
+**Markenname: HHBKTendo**
+
+Der Name setzt sich aus zwei Teilen zusammen:
+
+- **HHBK** steht für die *Handelsschule Hamburg-Bergedorf Kaufmann* – den schulischen Ursprung des Projekts. Die Abkürzung verankert die Marke bewusst in ihrem Entstehungskontext und signalisiert: Dieses Produkt wurde von echten Menschen mit echtem Bildungsauftrag entwickelt, nicht von einer gesichtslosen Konzernstruktur.
+- **Tendo** ist angelehnt an das japanische Wort *tendon* (天道, „Himmelsweg") sowie an den klanglichen Bezug zu *Nintendo* – dem bekanntesten Gaming-Unternehmen der Welt. „Tendo" steht für Spielfreude, für kulturelle Offenheit und für den Anspruch, in der Welt des digitalen Spielens einen eigenen Weg zu gehen.
+
+Zusammen ergibt **HHBKTendo** eine Marke, die lokale Identität mit globalem Gaming-Anspruch verbindet: ernst genug für den Bildungskontext, cool genug für den Markt.
+
+Der Produktname der App lautet **BlitzBoard** – ein Titel, der Geschwindigkeit (*Blitz*) mit dem klassischen Brettspiel-Format (*Board*) verbindet. Er kommuniziert: Hier kommt man schnell rein, spielt sofort, ohne Hürden. Der Produktname wird im Investor-Pitch und im Marketing-Kontext verwendet; in der Anwendung selbst tritt der Markenname HHBKTendo in den Vordergrund.
+
+---
+
+#### 15.9.2 Mission Statement
+
+> **HHBKTendo stellt klassische Strategiespiele mit echter KI-Herausforderung kostenlos bereit und macht taktisches Spielen für jeden zugänglich – ohne Wartezeiten, ohne Einstiegshürden, ohne Kompromisse beim Spielerlebnis.**
+
+Die Mission adressiert ein klar identifiziertes Problem: Langeweile ist universell. Schülerinnen und Schüler in Freistunden, Patientinnen und Patienten in Kliniken, Pendlerinnen und Pendler im Nahverkehr – alle haben ungenutzte Zeit, aber kaum Zugang zu qualitativ hochwertiger, kostenloser Unterhaltung ohne Ablenkungs-Mechanismen (Werbung, In-App-Käufe, Abonnementzwang). HHBKTendo schließt diese Lücke mit einem klaren Grundsatz: *Wer spielen will, spielt – sofort und ohne Schranken.*
+
+---
+
+#### 15.9.3 Vision Statement
+
+> **HHBKTendo wird die führende Plattform für algorithmisch gestützte Einzelspieler-Brettspiele – mit einer wachsenden Spielbibliothek, Partnerschaften mit Schulen und sozialen Einrichtungen sowie einer Community, die klassische Strategiespiele für das digitale Zeitalter neu entdeckt.**
+
+Mittelfristig (6–18 Monate): Erweiterung der Spielbibliothek um Dame und weitere Klassiker, Einführung eines Cosmetics-Shops (Skins & Boards) sowie aktive Kooperationen mit Schulen und Kliniken.
+
+Langfristig (2–5 Jahre): Positionierung als meistgenutzte kostenlose Brettspiel-App im deutschsprachigen Raum, Expansion in internationale Märkte (UK, Singapur, USA, Hongkong) und Aufbau eines B2B-Lizenzmodells für Marken-Kollaborationen.
+
+---
+
+#### 15.9.4 Sprachstil und Kommunikation der Marke
+
+**Tonalität:** Modern, direkt, spielerisch – aber nie kindisch. HHBKTendo spricht die Nutzenden wie gleichwertige Gesprächspartner an: respektvoll, knapp, auf den Punkt.
+
+**Grundprinzipien des Sprachstils:**
+
+| Prinzip | Beispiel (EN) | Beispiel (DE) |
+|---------|--------------|---------------|
+| Direkt & aktiv | „Your turn." | „Du bist dran." |
+| Kurz & prägnant | „You win!" | „Du gewinnst!" |
+| Motivierend, nicht bevormundend | „AI is thinking..." | „KI denkt nach..." |
+| Fehlermeldungen ohne Schuldzuweisung | „Username already taken." | „Benutzername vergeben." |
+
+**Slogan / Motto:**
+
+> *„Classic Games. Real Intelligence."*
+
+Der Slogan benennt beide Kernversprechen der Marke in drei Wörtern: das vertraute Spielformat (*Classic Games*) und die technologische Besonderheit (*Real Intelligence* – echter MiniMax-Algorithmus, keine Zufalls-KI). Er funktioniert auf Englisch als internationale Investorenansprache und als UI-Tagline auf dem Startscreen.
+
+**Sprachliche Elemente im GUI:**
+
+| Kontext | Text (EN) | Text (DE) |
+|---------|-----------|-----------|
+| Startscreen-Tagline | *HHBKTendo Game Collection* | *HHBKTendo Spielesammlung* |
+| Spielstart | „Play" | „Spielen" |
+| Spielerzug | „Your turn" | „Du bist dran" |
+| KI-Zug | „AI is thinking..." | „KI denkt nach..." |
+| Sieg | „You win!" | „Du gewinnst!" |
+| Niederlage | „AI wins!" | „KI gewinnt!" |
+| Unentschieden | „Draw!" | „Unentschieden!" |
+| Gastmodus-Hinweis | „Playing as guest – results won't be saved." | „Gastmodus – Ergebnisse werden nicht gespeichert." |
+| Spielabbruch | „Abort the current game?" | „Das aktuelle Spiel abbrechen?" |
+
+Die Sprache ist bewusst zweisprachig gehalten (EN Standard, DE optional): Dies spiegelt die internationale Zielgruppenstrategie wider und ermöglicht es, dieselbe App ohne Übersetzungsaufwand in mehreren Märkten einzusetzen.
+
+---
+
+#### 15.9.5 Design-Elemente – konzeptionelle Begründung
+
+Das HHBKTendo Design System ist kein dekoratives Add-on, sondern die visuelle Übersetzung von Mission und Vision. Jede Designentscheidung ist semantisch begründet:
+
+**Farbwahl:**
+
+| Farbe | Hex | Konzeptionelle Bedeutung | Bezug zur Mission/Vision |
+|-------|-----|--------------------------|--------------------------|
+| Deep Navy | `#0d0f1a` | Konzentration, Tiefe, Ruhe | Spielen als ernsthafte mentale Tätigkeit, kein Ablenkungsfeuerwerk |
+| Hot Pink | `#e8365d` | Energie, Aktion, Gefahr | Primäre CTA („Jetzt spielen") – erzeugt Dringlichkeit und Aufmerksamkeit |
+| Royal Purple | `#6c3fc5` | Qualität, Tiefe, Sekundäres | Sekundäre Aktionen – unterstützt Hierarchie ohne zu dominieren |
+| Cyber Cyan | `#00d4ff` | Technologie, KI, Intelligenz | Visualisierung der KI-Kompetenz; aktive Zustände, Hover-States |
+| White | `#ffffff` | Klarheit, Lesbarkeit | Primärtext – maximaler Kontrast auf dunklem Grund |
+| Slate Blue | `#8a9cc0` | Neutralität, Dezenz | Sekundärtext – Statuszeilen, Hinweise, ohne zu stören |
+
+Die Farbkombination Deep Navy + Hot Pink + Cyber Cyan ist kein Zufall: Sie positioniert HHBKTendo visuell exakt zwischen *seriösem Technologieprodukt* (dunkles Schema, klare Typografie) und *Gaming-Produkt* (leuchtende Akzente, Glow-Effekte). Diese Balance ist entscheidend für die Glaubwürdigkeit bei der Zielgruppe.
+
+**Typografie:**
+
+| Schriftart | Rolle | Begründung |
+|-----------|-------|------------|
+| Orbitron (Display) | Logo, Überschriften | Geometrisch, futuristisch, tech-orientiert – kommuniziert sofort: das ist ein modernes Produkt mit algorithmischem Anspruch |
+| Exo 2 (Body) | Buttons, Labels, Fließtext | Humanistisch, sehr lesbar auch bei kleinen Größen – schafft Nähe und Zugänglichkeit gegenüber der technischen Strenge von Orbitron |
+
+Die Kombination aus einem Display-Font mit technischem Charakter (Orbitron) und einem lesbaren Body-Font (Exo 2) spiegelt die Markenidentität direkt wider: anspruchsvoll in der KI, zugänglich im Spielerlebnis.
+
+**Formen und Symbole:**
+
+- **Schachfiguren ♙ ♟** als primäre Spielsymbole: universell bekannt, kulturell neutral, sofort verständlich.
+- **Glow-Effekte** (`box-shadow: 0 0 24px`) auf interaktiven Elementen: simulieren das physische Leuchten eines Gaming-Monitors und erzeugen ein Premium-Gefühl, das über die tatsächliche Preisklasse der App hinausgeht.
+- **Scharfe Kanten (0 px Radius) am Spielfeld**, abgerundete Kanten (6–12 px) an Buttons und Karten: Das Spielfeld ist Präzisionsraum, Buttons sind einladend.
+
+**Verbindung zu Mission und Vision:**
+
+Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – passend zur Mission, taktisches Spielen ohne Kompromisse anzubieten. Die leuchtenden Akzentfarben erzeugen trotzdem Lebendigkeit und signalisieren: das hier ist kein trockenes Bildungstool, sondern echtes Gaming. Diese Spannung ist die visuelle Essenz von HHBKTendo.
+
+---
+
+#### 15.9.6 Zielgruppenbezug
+
+**Primäre Zielgruppen (aus Investor-Pitch):**
+
+| Zielgruppe | Beschreibung | CI-Relevanz |
+|-----------|--------------|-------------|
+| Schülerinnen & Schüler | Kurze Spielsessions in Freistunden; kostensensitiv | Kostenloser Einstieg ohne Anmeldepflicht (Gastmodus); schnelle Orientierung durch klares UI |
+| Kinder in Langzeit-Kliniken | Begrenzte Ablenkungsmöglichkeiten; teilweise eingeschränkte Motorik | Großes, kontrastreiches Spielfeld; einfache Eingabe per Klick; keine In-App-Käufe die Eltern belasten |
+| Pendlerinnen & Pendler | Kurze Sessions; Nutzung unterwegs; zeitkritisch | „Zero Friction" – Sofortstart im Gastmodus, kein Login erforderlich |
+| Familien | Generationsübergreifend; bekannte Spiele bevorzugt | Klassikerformat (Bauernschach, Tic-Tac-Toe); deutsche Sprache als Option |
+
+**Marktgröße (aus Investor-Pitch):**
+- 3,5 Milliarden Mobile-Gamer weltweit (Stand 2024)
+- Marktvolumen Mobile Gaming: 98 Milliarden USD (Prognose 2030)
+- 60 % der Mobile-Gamer spielen Casual- oder Brettspiele
+
+**Was die CI bei der Zielgruppe vermitteln soll:**
+
+1. **Vertrauen**: Das dunkle, konsistente Design ohne Werbe-Pop-ups oder Ablenkungselemente signalisiert: Diese App respektiert die Zeit der Nutzenden.
+2. **Kompetenz**: Orbitron als Display-Font und die Cyber-Cyan-Akzente positionieren die KI-Komponente als technologisch ernsthaft – nicht als einfaches Zufallsspiel.
+3. **Zugänglichkeit**: Exo 2 als Lesetext, klare Kontraste und kurze Statusmeldungen stellen sicher, dass die App auch für weniger technikaffine Zielgruppen sofort bedienbar ist.
+4. **Kostenlosigkeit ohne Qualitätsverlust**: Die visuelle Qualität des Design Systems (Glow-Effekte, professionelle Typografie, konsistente Farbpalette) widerlegt das Vorurteil, kostenlose Apps sähen minderwertig aus. HHBKTendo sieht aus wie ein Premium-Produkt – und ist kostenlos. Das ist das stärkste Marketing-Signal.
+
+**Zusammenfassung CI-Wirkung:**
+
+> Die Corporate Identity von HHBKTendo kommuniziert in einem Blick: *Modernes Gaming-Studio, echte KI, keine Kompromisse – für alle.* Die Farbwelt, die Typografie und der Sprachstil greifen ineinander, um genau die Nutzenden anzusprechen, die bisher von spielelastigen, werbegetriebenen Apps abgeschreckt wurden: junge Menschen, Familien und Institutionen, die Qualität erwarten, aber keine Preisschilder bezahlen können.
+
+---
+
 | Version | Datum | Änderung |
 |---------|-------|----------|
 | 1.0 | 2026-04-20 | Erstversion |
@@ -875,5 +1016,6 @@ TEXT_MUTED     = "#4a5680"   #            – Dezenter Text, Hints
 | 1.3 | 2026-04-22 | Abgleich mit Lastenheft: PF-K03 (Dame) und PF-K04 (alternative KI-Schnittstelle) als Kann-Ziele ergänzt; neuer Abschnitt 12 mit Dokumentations- und Konzeptanforderungen (DOC-01–DOC-13) aus LD5100–LD5500; Abschnitt 14.2 Offene Punkte erweitert; Liefergegenstände mit Anforderungsreferenzen verknüpft |
 | 1.4 | 2026-04-22 | Neuer Abschnitt 15: Design und Corporate Identity – Farbpalette mit Begründungen, Typografie, Designprinzipien und ASCII-Mockups aller sechs Hauptscreens (Login, Menü, Bauernschach, Tic-Tac-Toe, Ergebnis-Overlay, Bestenliste) |
 | 1.5 | 2026-04-22 | Abschnitt 15 auf offizielles HHBKTendo Design System (Investor Edition) aktualisiert: Farbpalette auf 9 PDF-Tokens (Deep Navy, Card Navy, Mid Navy, Hot Pink, Royal Purple, Cyber Cyan, White, Slate Blue, Muted) umgestellt; Typografie von Segoe UI auf Orbitron (Display) + Exo 2 (Body) umgestellt; neue Abschnitte 15.5 Design Tokens (Radius/Spacing), 15.6 Glow & Effekte, 15.7 Python Code-Export ergänzt; alle Mockup-Farbannotationen aktualisiert |
+| 1.6 | 2026-04-24 | Neuer Abschnitt 15.9 CI-Konzept vollständig ergänzt (CI_addon.md): Name & Markenbeschreibung (HHBKTendo + BlitzBoard), Mission Statement, Vision Statement, Sprachstil & Kommunikation (Tonalität, Slogan, GUI-Texttabelle), konzeptionelle Begründung der Design-Elemente (Farbe, Typografie, Formen), Zielgruppenbezug mit Marktdaten aus dem Blitzboard Investor-Pitch |
 
 *Pflichtenheft erstellt auf Basis des Lastenhefts Strategiespiele V13a, HHBK Tendo Research Center, 2026.*
