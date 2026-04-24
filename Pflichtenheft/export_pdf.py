@@ -9,13 +9,18 @@ import re
 import sys
 
 # macOS: Homebrew-Bibliotheken (libgobject, libpango) für WeasyPrint einbinden.
-# DYLD_LIBRARY_PATH muss beim Prozessstart gesetzt sein, daher ggf. Neustart.
+# SIP strippt DYLD_LIBRARY_PATH beim os.execv-Neustart, daher subprocess als Workaround.
 _homebrew_lib = "/opt/homebrew/lib"
 if sys.platform == "darwin" and os.path.isdir(_homebrew_lib):
-    _existing = os.environ.get("DYLD_LIBRARY_PATH", "")
-    if _homebrew_lib not in _existing:
-        os.environ["DYLD_LIBRARY_PATH"] = f"{_homebrew_lib}:{_existing}".strip(":")
-        os.execv(sys.executable, [sys.executable] + sys.argv)  # Prozess neu starten
+    if _homebrew_lib not in os.environ.get("DYLD_LIBRARY_PATH", ""):
+        import subprocess
+        env = os.environ.copy()
+        env["DYLD_LIBRARY_PATH"] = _homebrew_lib
+        result = subprocess.run(
+            [sys.executable] + sys.argv,
+            env=env
+        )
+        sys.exit(result.returncode)
 
 import markdown
 from weasyprint import HTML, CSS
