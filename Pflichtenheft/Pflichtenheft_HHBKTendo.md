@@ -3,7 +3,7 @@
 **Projekt:** Strategiespiele-Prototyp mit MiniMax-KI
 **Auftraggeber:** HHBK Tendo Research Center
 **Auftragnehmer:** Projektteam (Lernfeld 5)
-**Version:** 2.0
+**Version:** 2.1
 **Datum:** 2026-04-24
 **Status:** Entwurf
 
@@ -946,7 +946,7 @@ Langfristig (2–5 Jahre): Positionierung als meistgenutzte kostenlose Brettspie
 
 #### 13.9.4 Sprachstil und Kommunikation der Marke
 
-**Tonalität:** Modern, jugendlich und direkt – locker, energetisch, einladend, aber nie kindisch. HHBKTendo spricht die Nutzenden wie gleichwertige Gesprächspartner an: respektvoll, knapp, auf den Punkt. Die Ansprache erfolgt in der Du-Form, um Nähe und niedrige Hemmschwelle zu vermitteln.
+**Tonalität:** Modern, jugendlich und direkt – locker, energetisch, einladend, leicht wettbewerbsorientiert, aber nie kindisch. HHBKTendo spricht die Nutzenden wie gleichwertige Gesprächspartner an: respektvoll, knapp, auf den Punkt. Die Ansprache erfolgt in der Du-Form, um Nähe und niedrige Hemmschwelle zu vermitteln.
 
 **Grundprinzipien des Sprachstils:**
 
@@ -1037,6 +1037,12 @@ Das Design-System kombiniert bewusst zwei gegensätzliche Formsprachen, die jewe
 
 Die Kombination beider Stile erzeugt eine ausgewogene, dynamische Optik: Die Anwendung fühlt sich einladend an (runde UI-Elemente), ohne die strategische Ernsthaftigkeit des Spiels zu untergraben (scharfes Spielfeld).
 
+Ergänzend dazu folgt die gesamte UI einem **gridartigen Anordnungsprinzip**, das dem Spielfeld selbst nachempfunden ist: Karten, Buttons und Tabellen orientieren sich an klaren, rechteckigen Strukturen. Die Gestaltung wirkt dadurch konsistent und intuitiv – das visuelle System fühlt sich wie eine natürliche Erweiterung des Spielfelds an.
+
+**Designbegründung:**
+
+Das Design ist bewusst reduziert und funktional gehalten. Klare Strukturen unterstützen das strategische Denken der Spielenden, während starke Farbkontraste (Deep Navy gegen Hot Pink / Cyber Cyan) den Wettbewerbscharakter der Spiele hervorheben.
+
 **Symbole und Ikonografie:**
 
 | Symbol | Bedeutung | Einsatz |
@@ -1063,6 +1069,7 @@ Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – pas
 | Kinder in Langzeit-Kliniken | Begrenzte Ablenkungsmöglichkeiten; teilweise eingeschränkte Motorik | Großes, kontrastreiches Spielfeld; einfache Eingabe per Klick; keine In-App-Käufe die Eltern belasten |
 | Pendlerinnen & Pendler | Kurze Sessions; Nutzung unterwegs; zeitkritisch | „Zero Friction" – Sofortstart im Gastmodus, kein Login erforderlich |
 | Familien | Generationsübergreifend; bekannte Spiele bevorzugt | Klassikerformat (Bauernschach, Tic-Tac-Toe); deutsche Sprache als Option |
+| Gelegenheitsspieler | Kein Vorwissen nötig; suchen schnelle, unkomplizierte Unterhaltung | Sofortstart im Gastmodus; fünf Schwierigkeitsgrade vom Einstieg bis zur Herausforderung |
 
 **Marktgröße (aus Investor-Pitch):**
 - 3,5 Milliarden Mobile-Gamer weltweit (Stand 2024)
@@ -1075,6 +1082,17 @@ Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – pas
 2. **Kompetenz**: Orbitron als Display-Font und die Cyber-Cyan-Akzente positionieren die KI-Komponente als technologisch ernsthaft – nicht als einfaches Zufallsspiel.
 3. **Zugänglichkeit**: Exo 2 als Lesetext, klare Kontraste und kurze Statusmeldungen stellen sicher, dass die App auch für weniger technikaffine Zielgruppen sofort bedienbar ist.
 4. **Kostenlosigkeit ohne Qualitätsverlust**: Die visuelle Qualität des Design Systems (Glow-Effekte, professionelle Typografie, konsistente Farbpalette) widerlegt das Vorurteil, kostenlose Apps sähen minderwertig aus. HHBKTendo sieht aus wie ein Premium-Produkt – und ist kostenlos. Das ist das stärkste Marketing-Signal.
+
+**Gestaltungsziele:**
+
+Die Anwendung soll für alle Zielgruppen folgende Grundanforderungen erfüllen:
+
+1. **Schnell verständlich** – keine Einarbeitungszeit, intuitive Navigation
+2. **Sofort spielbar** – Spielstart ohne Registrierung möglich (Gastmodus)
+3. **Motivation durch Wettbewerb** – KI als echter Gegner, Bestenliste als Anreiz
+4. **Strategisches Denken fördern** – fünf Schwierigkeitsgrade, die schrittweise herausfordern
+
+---
 
 **Geschäftsmodell und CI-Strategie (aus Investor-Pitch):**
 
@@ -1093,6 +1111,12 @@ Das Geschäftsmodell von BlitzBoard ist direkt mit der CI verzahnt: Der kostenlo
 
 ---
 
+#### 13.9.7 Fazit
+
+HHBKTendo steht für schnelle, direkt zugängliche Strategiespiele mit klarem Fokus auf Wettbewerb und Entscheidungsfindung. Die Corporate Identity verbindet eine moderne, reduzierte Gestaltung mit einer aktiven und klaren Sprache – und schafft so ein konsistentes, funktionales Nutzererlebnis, das von der Farbwahl über die Typografie bis hin zu jedem einzelnen GUI-Text dieselbe Botschaft trägt: **Spielen. Denken. Gewinnen.**
+
+---
+
 | Version | Datum | Änderung |
 |---------|-------|----------|
 | 1.0 | 2026-04-20 | Erstversion |
@@ -1105,6 +1129,7 @@ Das Geschäftsmodell von BlitzBoard ist direkt mit der CI verzahnt: Der kostenlo
 | 1.7 | 2026-04-24 | Abschnitt MiniMax vollständig überarbeitet und erweitert: Grundprinzip, Spielbaum-Visualisierung, rekursiver Ablauf (Pseudocode für Maximizer und Minimizer), erweitertes Illustrationsdiagramm mit Begründung, Alpha-Beta-Pruning mit Beispiel und Komplexitätsangabe, spielunabhängige Schnittstelle dokumentiert |
 | 1.8 | 2026-04-24 | CI-Konzept mit CI_ideas.md und Blitzboard_Pitch erweitert: BlitzBoard-Beschreibung als 2-Player-App für Familien ergänzt; Mission um B2C-Fokus und Tonalität ("mit einem Lächeln") angereichert; Vision um "aller Kulturen" und strategische Wettbewerbsvorteile (4 Pitch-Faktoren) erweitert; Sprachstil um "jugendlich", Du-Ansprache und deutschen Slogan "Spiele, die schlau machen." ergänzt; Design-Elemente um 2-Player-Farbursprung (Blau/Rot), Inter/Montserrat/Poppins als evaluierte Alternativen, Formensprache-Tabelle (rund/scharf) und Symbolik-Tabelle (⚡🎲🎮) erweitert; Zielgruppe um Geschäftsmodell-Tabelle und überarbeitete CI-Wirkungszusammenfassung ergänzt |
 | 1.9 | 2026-04-24 | Abschnitte 4.3 und 10 zusammengeführt: 4.3 auf funktionale Anforderungen + Querverweis zu Abschnitt 10 reduziert; Schwierigkeitsgrade-Tabelle und Zeitlimit in neuen Abschnitt 10.7 verschoben; 10.8 (ehemals 10.7) Spielunabhängige Schnittstelle umnummeriert |
+| 2.1 | 2026-04-24 | CI-Konzept mit CI_ideas2 abgeglichen: Tonalität um „leicht wettbewerbsorientiert" ergänzt; Formensprache um gridartige Anordnung und Designbegründung erweitert; Zielgruppe „Gelegenheitsspieler" ergänzt; vier Gestaltungsziele hinzugefügt; neuer Abschnitt 13.9.7 Fazit |
 | 2.0 | 2026-04-24 | Abschnitt Design & CI vor Liefergegenstände verschoben; Abschnitte umnummeriert: Design → 13, Liefergegenstände → 14, Projektplanung → 15; Inhaltsverzeichnis und alle Querverweise aktualisiert; Changelog in korrekte aufsteigende Reihenfolge gebracht |
 
 *Pflichtenheft erstellt auf Basis des Lastenhefts Strategiespiele V13a, HHBK Tendo Research Center, 2026.*
