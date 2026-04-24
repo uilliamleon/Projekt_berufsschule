@@ -9,17 +9,23 @@ import re
 import sys
 
 # macOS: Homebrew-Bibliotheken (libgobject, libpango) für WeasyPrint einbinden.
-# SIP strippt DYLD_LIBRARY_PATH beim os.execv-Neustart, daher subprocess als Workaround.
+# Python 3.7 (x86_64) ist inkompatibel mit den ARM64-Homebrew-Libraries →
+# automatisch auf python3 (universal binary) wechseln.
+# SIP strippt DYLD_LIBRARY_PATH beim os.execv, daher subprocess als Workaround.
 _homebrew_lib = "/opt/homebrew/lib"
 if sys.platform == "darwin" and os.path.isdir(_homebrew_lib):
-    if _homebrew_lib not in os.environ.get("DYLD_LIBRARY_PATH", ""):
+    if os.environ.get("_WEASYPRINT_READY") != "1":
         import subprocess
+        import shutil
+        # python3.7 ist x86_64 und inkompatibel → bevorzuge python3 als ARM64
+        python = shutil.which("python3") or sys.executable
         env = os.environ.copy()
         env["DYLD_LIBRARY_PATH"] = _homebrew_lib
-        result = subprocess.run(
-            [sys.executable] + sys.argv,
-            env=env
-        )
+        env["_WEASYPRINT_READY"] = "1"
+        # arch -arm64 erzwingt native ARM64-Ausführung (kein Rosetta-Erbe)
+        arch_cmd = shutil.which("arch")
+        cmd = ([arch_cmd, "-arm64", python] if arch_cmd else [python]) + sys.argv
+        result = subprocess.run(cmd, env=env)
         sys.exit(result.returncode)
 
 import markdown

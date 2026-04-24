@@ -3,7 +3,7 @@
 **Projekt:** Strategiespiele-Prototyp mit MiniMax-KI
 **Auftraggeber:** HHBK Tendo Research Center
 **Auftragnehmer:** Projektteam (Lernfeld 5)
-**Version:** 1.6
+**Version:** 1.7
 **Datum:** 2026-04-24
 **Status:** Entwurf
 
@@ -407,7 +407,62 @@ In `auth.py`:
 
 ## 10 MiniMax-Algorithmus und Bewertungsfunktionen
 
-### 10.1 Illustrationsdiagramm
+### 10.1 Grundprinzip
+
+MiniMax ist ein rekursiver Entscheidungsalgorithmus für Zwei-Spieler-Nullsummenspiele. Beide Spieler werden als optimal handelnd angenommen:
+
+- Der **Maximizer** (KI) wählt stets den Zug mit dem **höchsten** Bewertungswert.
+- Der **Minimizer** (Mensch) wählt stets den Zug mit dem **niedrigsten** Bewertungswert.
+
+Alle Spielstellungen werden mit einer numerischen Bewertung versehen: **positiv = vorteilhaft für die KI, negativ = vorteilhaft für den menschlichen Spieler**. Der Algorithmus simuliert so rekursiv die optimale Reaktion beider Seiten bis zu einer definierten Suchtiefe.
+
+### 10.2 Spielbaum
+
+Der Algorithmus baut einen Baum aller möglichen Spielverläufe auf. Jeder Knoten repräsentiert eine Spielstellung; jeder Ast einen möglichen Zug. An den Blättern (Tiefenlimit oder Spielende) wird die Stellung bewertet:
+
+```
+              KI zieht (Maximizer)
+             /          |          \
+          Zug A        Zug B       Zug C
+            |            |           |
+       Mensch zieht  Mensch zieht  Mensch zieht   ← Minimizer
+        /      \      /      \
+    Zug A1   Zug A2  Zug B1  Zug B2
+      |          |     |        |
+     +10         -5   +3       +8       ← evaluate(board)
+```
+
+Der Minimizer wählt auf seiner Ebene das Minimum: Ast A liefert −5 (Minimizer wählt A2), Ast B liefert +3 (Minimizer wählt B1). Der Maximizer wählt daraus das Maximum: **Ast B mit +3** wird gespielt.
+
+### 10.3 Rekursiver Ablauf
+
+Der Algorithmus arbeitet in zwei alternierenden Modi:
+
+**Maximizer-Modus (KI zieht):**
+```
+best_score = -∞
+Für jeden möglichen Zug:
+    Führe Zug auf Kopie des Spielfelds aus
+    score = minimax(neues Spielfeld, tiefe−1, Minimizer)
+    best_score = max(best_score, score)
+Gib best_score zurück
+```
+
+**Minimizer-Modus (Mensch zieht):**
+```
+best_score = +∞
+Für jeden möglichen Zug:
+    Führe Zug auf Kopie des Spielfelds aus
+    score = minimax(neues Spielfeld, tiefe−1, Maximizer)
+    best_score = min(best_score, score)
+Gib best_score zurück
+```
+
+**Abbruchbedingungen** (Blätter des Baums):
+- Das Spiel ist beendet (Sieg, Niederlage, Unentschieden) → terminaler Score wird sofort zurückgegeben
+- Die maximale Suchtiefe ist erreicht → `evaluate(board)` bewertet die aktuelle Stellung heuristisch
+
+### 10.4 Illustrationsdiagramm
 
 ```
         maximize (KI)
@@ -417,19 +472,31 @@ In `auth.py`:
    /    \         /    \
  +3     +5     -2     -9
 ```
-KI wählt den Zug, der zum Wert +3 führt (Minimizer wählt den schlechtesten für KI = +3 statt +5).
 
-### 10.2 Alpha-Beta-Pruning
+Die KI wählt den Zug, der zum Wert +3 führt. Begründung: Der Minimizer wählt auf der linken Seite +3 (statt +5, da er den schlechtesten Wert für die KI bevorzugt) und auf der rechten Seite −2. Der Maximizer wählt +3 gegenüber −2.
 
-Äste des Spielbaums werden abgeschnitten, wenn feststeht, dass der Gegner diesen Pfad nie wählen wird:
+### 10.5 Alpha-Beta-Pruning
 
-- **Alpha (α)**: Bisher bestes Ergebnis für den Maximizer → wird nach oben weitergegeben
-- **Beta (β)**: Bisher bestes Ergebnis für den Minimizer → wird nach unten weitergegeben
-- Abbruch wenn `β ≤ α`
+Ohne Optimierung müsste der Algorithmus jeden Ast des Spielbaums vollständig durchsuchen. Alpha-Beta-Pruning reduziert den Rechenaufwand, indem Äste abgeschnitten werden, sobald feststeht, dass sie das Ergebnis nicht mehr verbessern können.
 
-Einsparung: Im besten Fall O(b^(d/2)) statt O(b^d) Knoten (b = Verzweigungsgrad, d = Tiefe).
+**Zwei Grenzwerte werden mitgeführt:**
 
-### 10.3 Terminale Bewertungen
+- **Alpha (α)**: Der bisher beste garantierte Score für den Maximizer. Wird nach oben weitergegeben und erhöht sich nur.
+- **Beta (β)**: Der bisher beste garantierte Score für den Minimizer. Wird nach unten weitergegeben und verringert sich nur.
+
+**Abbruchkriterium:** Sobald `β ≤ α` gilt, werden alle verbleibenden Geschwisterknoten übersprungen.
+
+**Beispiel:**
+```
+KI bewertet Zug A → Score +8  →  alpha = 8
+KI bewertet Zug B, Minimizer schaut B1 an → Score +3  →  beta = 3
+Da beta(3) ≤ alpha(8): Züge B2, B3, ... werden nicht mehr berechnet. ✂️
+```
+Der Minimizer kann bei Ast B höchstens +3 erzwingen – das ist schlechter als das bereits gesicherte +8 aus Ast A. Ast B ist daher irrelevant.
+
+**Einsparung:** Im besten Fall O(b^(d/2)) statt O(b^d) Knoten (b = Verzweigungsgrad, d = Tiefe). Bei Suchtiefe 5 kann dies die Knotenanzahl auf die Wurzel des ursprünglichen Wertes reduzieren.
+
+### 10.6 Terminale Bewertungen
 
 | Zustand | Score |
 |---------|-------|
@@ -437,6 +504,25 @@ Einsparung: Im besten Fall O(b^(d/2)) statt O(b^d) Knoten (b = Verzweigungsgrad,
 | Mensch gewinnt | −1.000.000 |
 | Unentschieden | 0 |
 | Tiefenlimit (Blatt) | evaluate(board) |
+
+Die hohen terminalen Werte (±1.000.000) stellen sicher, dass ein tatsächlicher Sieg oder eine Niederlage immer stärker gewichtet wird als jede heuristische Zwischenbewertung, unabhängig davon in welcher Suchtiefe das Spielende erreicht wird.
+
+### 10.7 Spielunabhängige Schnittstelle
+
+Die Implementierung in `minimax.py` kennt keine spielspezifische Logik. Alle spielabhängigen Operationen werden als Callback-Funktionen übergeben:
+
+```python
+get_best_move(
+    board,              # aktuelles Spielfeld (2D-Liste)
+    depth,              # Suchtiefe (= gewählter Schwierigkeitsgrad)
+    get_moves_fn,       # fn(board, is_maximizing) → Liste aller gültigen Züge
+    apply_move_fn,      # fn(board, move, is_maximizing) → neues Board (Kopie)
+    evaluate_fn,        # fn(board) → int  (positiv = gut für KI)
+    is_terminal_fn      # fn(board) → (bool, int|None)
+)
+```
+
+Dieselbe KI-Engine wird dadurch für Bauernschach und Tic-Tac-Toe wiederverwendet (LN5040). Ein weiteres Spiel erfordert lediglich die Implementierung dieser vier Funktionen – `minimax.py` selbst bleibt unverändert.
 
 ---
 
@@ -1016,6 +1102,7 @@ Die visuelle Dunkelheit der App schafft einen ablenkungsfreien Fokusraum – pas
 | 1.3 | 2026-04-22 | Abgleich mit Lastenheft: PF-K03 (Dame) und PF-K04 (alternative KI-Schnittstelle) als Kann-Ziele ergänzt; neuer Abschnitt 12 mit Dokumentations- und Konzeptanforderungen (DOC-01–DOC-13) aus LD5100–LD5500; Abschnitt 14.2 Offene Punkte erweitert; Liefergegenstände mit Anforderungsreferenzen verknüpft |
 | 1.4 | 2026-04-22 | Neuer Abschnitt 15: Design und Corporate Identity – Farbpalette mit Begründungen, Typografie, Designprinzipien und ASCII-Mockups aller sechs Hauptscreens (Login, Menü, Bauernschach, Tic-Tac-Toe, Ergebnis-Overlay, Bestenliste) |
 | 1.5 | 2026-04-22 | Abschnitt 15 auf offizielles HHBKTendo Design System (Investor Edition) aktualisiert: Farbpalette auf 9 PDF-Tokens (Deep Navy, Card Navy, Mid Navy, Hot Pink, Royal Purple, Cyber Cyan, White, Slate Blue, Muted) umgestellt; Typografie von Segoe UI auf Orbitron (Display) + Exo 2 (Body) umgestellt; neue Abschnitte 15.5 Design Tokens (Radius/Spacing), 15.6 Glow & Effekte, 15.7 Python Code-Export ergänzt; alle Mockup-Farbannotationen aktualisiert |
+| 1.7 | 2026-04-24 | Abschnitt 10 (MiniMax) vollständig überarbeitet und erweitert: Grundprinzip, Spielbaum-Visualisierung, rekursiver Ablauf (Pseudocode für Maximizer und Minimizer), erweitertes Illustrationsdiagramm mit Begründung, Alpha-Beta-Pruning mit Beispiel und Komplexitätsangabe, spielunabhängige Schnittstelle dokumentiert |
 | 1.6 | 2026-04-24 | Neuer Abschnitt 15.9 CI-Konzept vollständig ergänzt (CI_addon.md): Name & Markenbeschreibung (HHBKTendo + BlitzBoard), Mission Statement, Vision Statement, Sprachstil & Kommunikation (Tonalität, Slogan, GUI-Texttabelle), konzeptionelle Begründung der Design-Elemente (Farbe, Typografie, Formen), Zielgruppenbezug mit Marktdaten aus dem Blitzboard Investor-Pitch |
 
 *Pflichtenheft erstellt auf Basis des Lastenhefts Strategiespiele V13a, HHBK Tendo Research Center, 2026.*
