@@ -228,7 +228,7 @@ def build_login_screen(root, frame):
     """Baut den Login/Register-Screen."""
     # Header
     tk.Label(
-        frame, text="HHBKTendo",
+        frame, text="BlitzBoard",
         bg=COLORS["bg_dark"], fg=COLORS["accent"],
         font=("Segoe UI", 28, "bold")
     ).pack(pady=(40, 4))
