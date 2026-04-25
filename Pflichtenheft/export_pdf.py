@@ -57,6 +57,7 @@ TEAM_MEMBERS = [
     "Niklas Pingel",
     "Jakub Krause",
     "Arda Dinda",
+    "Uilliam Leon Steik",
 ]
 
 # ---------------------------------------------------------------------------
