@@ -211,6 +211,56 @@ def make_entry(parent, show=None):
     )
 
 
+def make_radio_group(parent, options, variable):
+    """Ersetzt tk.Radiobutton durch gestylte, klickbare Zeilen."""
+    entries = {}
+
+    def refresh(selected_val):
+        for v, (rf, dl, tl) in entries.items():
+            if v == selected_val:
+                rf.config(bg=COLORS["bg_mid"])
+                dl.config(text="◆", fg=COLORS["accent"], bg=COLORS["bg_mid"])
+                tl.config(fg=COLORS["text_light"], font=("Segoe UI", 9, "bold"), bg=COLORS["bg_mid"])
+            else:
+                rf.config(bg=COLORS["bg_card"])
+                dl.config(text="◇", fg=COLORS["text_dim"], bg=COLORS["bg_card"])
+                tl.config(fg=COLORS["text_dim"], font=("Segoe UI", 9), bg=COLORS["bg_card"])
+
+    for val, label_text in options:
+        row = tk.Frame(parent, bg=COLORS["bg_card"], cursor="hand2")
+        row.pack(fill="x", pady=1)
+        dot = tk.Label(row, text="◇", bg=COLORS["bg_card"],
+                       fg=COLORS["text_dim"], font=("Segoe UI", 9), cursor="hand2")
+        dot.pack(side="left", padx=(6, 4), pady=2)
+        txt = tk.Label(row, text=label_text, bg=COLORS["bg_card"],
+                       fg=COLORS["text_dim"], font=("Segoe UI", 9), cursor="hand2")
+        txt.pack(side="left", pady=2)
+        entries[val] = (row, dot, txt)
+
+        def on_click(v=val):
+            variable.set(v)
+            refresh(v)
+
+        def on_enter(e, v=val, rf=row, dl=dot, tl=txt):
+            if variable.get() != v:
+                rf.config(bg=COLORS["bg_mid"])
+                dl.config(bg=COLORS["bg_mid"])
+                tl.config(bg=COLORS["bg_mid"])
+
+        def on_leave(e, v=val, rf=row, dl=dot, tl=txt):
+            if variable.get() != v:
+                rf.config(bg=COLORS["bg_card"])
+                dl.config(bg=COLORS["bg_card"])
+                tl.config(bg=COLORS["bg_card"])
+
+        for widget in (row, dot, txt):
+            widget.bind("<Button-1>", lambda e, v=val: on_click(v))
+            widget.bind("<Enter>", on_enter)
+            widget.bind("<Leave>", on_leave)
+
+    refresh(variable.get())
+
+
 def show_screen(root, build_fn):
     """Wechselt zum neuen Screen, zerstört den alten."""
     if app_state["current_screen"]:
@@ -372,12 +422,20 @@ def build_main_menu(root, frame):
         from PIL import Image, ImageTk
         import os
         logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 "Mockups", "Assets", "Logo", "Logo_HHBKTendo.png")
-        logo_pil = Image.open(logo_path)
-        # Nur den Controller-Teil ausschneiden (linkes Viertel des 560×200-Bildes)
-        crop_w = int(logo_pil.width * 0.26)
-        logo_pil = logo_pil.crop((0, 0, crop_w, logo_pil.height))
-        # Auf Header-Höhe skalieren
+                                 "Mockups", "Assets", "Logo", "Screenshot 2026-04-28 145738.png")
+        logo_pil = Image.open(logo_path).convert("RGBA")
+
+        # Hintergrundfarbe (Eckpixel oben-links) transparent machen
+        pixels = logo_pil.load()
+        bg_color = pixels[0, 0][:3]  # RGB des Hintergrunds
+        tolerance = 30               # Farbtoleranz für leichte Verläufe
+        for y in range(logo_pil.height):
+            for x in range(logo_pil.width):
+                r, g, b, a = pixels[x, y]
+                if all(abs(int(c) - int(bg)) <= tolerance for c, bg in zip((r, g, b), bg_color)):
+                    pixels[x, y] = (r, g, b, 0)  # transparent
+
+        # Auf Header-Höhe skalieren, Seitenverhältnis beibehalten
         target_h = 44
         target_w = int(logo_pil.width * target_h / logo_pil.height)
         logo_pil = logo_pil.resize((target_w, target_h), Image.LANCZOS)
@@ -450,14 +508,7 @@ def build_main_menu(root, frame):
         diff_var = tk.IntVar(value=3)
         diff_frame = tk.Frame(card, bg=COLORS["bg_card"])
         diff_frame.pack(pady=6)
-        for val, lbl in diff_levels:
-            tk.Radiobutton(
-                diff_frame, text=lbl, variable=diff_var, value=val,
-                bg=COLORS["bg_card"], fg=COLORS["text_light"],
-                selectcolor=COLORS["accent2"],
-                activebackground=COLORS["bg_card"],
-                font=("Segoe UI", 9)
-            ).pack(anchor="w")
+        make_radio_group(diff_frame, diff_levels, diff_var)
 
         # Factory-Funktion: verhindert, dass alle Schleifendurchläufe
         # dieselbe Variable referenzieren (Closure-over-loop-variable-Problem)
