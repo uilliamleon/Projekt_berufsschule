@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" width="100" height="120">
+  <defs>
+    <radialGradient id="pbPawnBody" cx="40%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#d8c9ff"></stop>
+      <stop offset="35%" stop-color="#9b7bff"></stop>
+      <stop offset="75%" stop-color="#5a3bd6"></stop>
+      <stop offset="100%" stop-color="#150a45"></stop>
+    </radialGradient>
+    <linearGradient id="pbPawnBase" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7c5cff"></stop>
+      <stop offset="100%" stop-color="#1f0f5c"></stop>
+    </linearGradient>
+    <radialGradient id="pbPawnGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.6"></stop>
+      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"></stop>
+    </radialGradient>
+    <filter id="pbPawnNeon" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.6" result="b"></feGaussianBlur>
+      <feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge>
+    </filter>
+  </defs>
+
+  
+  <ellipse cx="50" cy="108" rx="36" ry="6" fill="url(#pbPawnGlow)"></ellipse>
+
+  
+  <ellipse cx="50" cy="105" rx="28" ry="5" fill="#150a45"></ellipse>
+  <ellipse cx="50" cy="103" rx="28" ry="5" fill="url(#pbPawnBase)"></ellipse>
+  <ellipse cx="50" cy="101.5" rx="28" ry="5" fill="none" stroke="#a98bff" stroke-width="0.8" opacity="0.9" filter="url(#pbPawnNeon)"></ellipse>
+
+  
+  <path d="M38 100&#xA;           Q36 88 42 78&#xA;           L58 78&#xA;           Q64 88 62 100 Z" fill="url(#pbPawnBody)"></path>
+  <path d="M38 100&#xA;           Q36 88 42 78&#xA;           L58 78&#xA;           Q64 88 62 100" fill="none" stroke="#a98bff" stroke-width="0.8" opacity="0.85" filter="url(#pbPawnNeon)"></path>
+
+  
+  <ellipse cx="50" cy="78" rx="16" ry="3.5" fill="#1f0f5c"></ellipse>
+  <ellipse cx="50" cy="77" rx="16" ry="3.5" fill="url(#pbPawnBase)"></ellipse>
+  <ellipse cx="50" cy="76" rx="16" ry="3" fill="none" stroke="#5ef3ff" stroke-width="0.6" opacity="0.9" filter="url(#pbPawnNeon)"></ellipse>
+
+  
+  <path d="M44 76 Q44 70 46 66 L54 66 Q56 70 56 76 Z" fill="url(#pbPawnBody)"></path>
+
+  
+  <circle cx="50" cy="50" r="16" fill="url(#pbPawnBody)"></circle>
+  <circle cx="50" cy="50" r="16" fill="none" stroke="#a98bff" stroke-width="1" opacity="0.95" filter="url(#pbPawnNeon)"></circle>
+  <circle cx="50" cy="50" r="12" fill="none" stroke="#5ef3ff" stroke-width="0.5" opacity="0.45"></circle>
+
+  
+  <g fill="#5ef3ff" opacity="0.85">
+    <circle cx="50" cy="42" r="0.9"></circle>
+    <circle cx="56" cy="50" r="0.9"></circle>
+    <circle cx="50" cy="58" r="0.9"></circle>
+    <circle cx="44" cy="50" r="0.9"></circle>
+  </g>
+
+  
+  <ellipse cx="44" cy="44" rx="6" ry="3.5" fill="#ffffff" opacity="0.5"></ellipse>
+  <ellipse cx="42" cy="42" rx="2.5" ry="1.5" fill="#ffffff" opacity="0.8"></ellipse>
+
+  
+  <g opacity="0.5">
+    <line x1="38" y1="92" x2="62" y2="92" stroke="#5ef3ff" stroke-width="0.4"></line>
+    <line x1="36" y1="98" x2="64" y2="98" stroke="#5ef3ff" stroke-width="0.4"></line>
+  </g>
+</svg>

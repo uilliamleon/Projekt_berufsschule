@@ -168,6 +168,20 @@ def get_user_stats(user_id, game=None):
     return [dict(r) for r in rows]
 
 
+def update_password(username, new_password_hash):
+    """Aktualisiert den Passwort-Hash eines Benutzers."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE users SET password_hash = ? WHERE username = ?",
+        (new_password_hash, username)
+    )
+    affected = cursor.rowcount
+    conn.commit()
+    conn.close()
+    return affected > 0
+
+
 def update_user_language(user_id, language):
     """Aktualisiert die Spracheinstellung eines Benutzers (LD4230)."""
     conn = get_connection()

@@ -18,6 +18,17 @@ import pawn_chess as pc
 import tictactoe as ttt
 
 # ─────────────────────────────────────────────
+# Globaler GIF-Zustand (screen-übergreifende Animation)
+# ─────────────────────────────────────────────
+_gif = {
+    "frames": [],   # ImageTk.PhotoImage-Objekte (einmalig geladen)
+    "delays": [],   # Anzeigedauer je Frame in ms
+    "idx":    0,    # aktuell angezeigter Frame-Index
+    "label":  None, # das Background-Label des aktiven Screens
+    "root":   None, # tk.Tk-Referenz für root.after()
+}
+
+# ─────────────────────────────────────────────
 # Globaler App-Zustand
 # ─────────────────────────────────────────────
 app_state = {
@@ -112,6 +123,12 @@ TEXTS = {
         "confirm_abort": "Abort the current game?",
         "level": "Level",
         "keep_logged_in": "Keep me logged in",
+        "forgot_password": "Forgot password?",
+        "reset_password": "Reset Password",
+        "new_password": "New Password",
+        "confirm_password": "Confirm Password",
+        "passwords_no_match": "Passwords do not match.",
+        "password_reset_ok": "Password reset. You can now log in.",
     },
     "de": {
         "title": "HHBKTendo Spielesammlung",
@@ -153,6 +170,12 @@ TEXTS = {
         "confirm_abort": "Das aktuelle Spiel abbrechen?",
         "level": "Level",
         "keep_logged_in": "Angemeldet bleiben",
+        "forgot_password": "Passwort vergessen?",
+        "reset_password": "Passwort zurücksetzen",
+        "new_password": "Neues Passwort",
+        "confirm_password": "Passwort bestätigen",
+        "passwords_no_match": "Passwörter stimmen nicht überein.",
+        "password_reset_ok": "Passwort zurückgesetzt. Du kannst dich jetzt anmelden.",
     }
 }
 
@@ -261,6 +284,48 @@ def make_radio_group(parent, options, variable):
     refresh(variable.get())
 
 
+def _load_gif_frames():
+    """Lädt alle GIF-Frames einmalig in _gif["frames"] (benötigt Pillow)."""
+    try:
+        from PIL import Image, ImageTk, ImageEnhance, ImageSequence
+        import os
+        gif_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "Mockups", "Assets", "Background",
+                                "6m2ocolc0ip91.gif")
+        gif = Image.open(gif_path)
+        for gif_frame in ImageSequence.Iterator(gif):
+            delay = gif_frame.info.get("duration", 100)
+            resized = gif_frame.convert("RGBA").resize((820, 700), Image.LANCZOS)
+            darkened = ImageEnhance.Brightness(resized).enhance(0.25)
+            _gif["frames"].append(ImageTk.PhotoImage(darkened))
+            _gif["delays"].append(max(delay, 50))
+    except Exception:
+        pass
+
+
+def _gif_tick():
+    """Globaler Animations-Takt – läuft unabhängig vom aktiven Screen über root.after()."""
+    if not _gif["frames"] or _gif["root"] is None:
+        return
+    lbl = _gif["label"]
+    if lbl is not None:
+        try:
+            lbl.config(image=_gif["frames"][_gif["idx"]])
+        except tk.TclError:
+            _gif["label"] = None  # Label wurde zerstört – kein Problem, nächster Screen registriert neu
+    _gif["idx"] = (_gif["idx"] + 1) % len(_gif["frames"])
+    _gif["root"].after(_gif["delays"][_gif["idx"]], _gif_tick)
+
+
+def set_gif_background(frame):
+    """Legt ein Hintergrund-Label im Frame an und registriert es beim globalen Animator."""
+    if not _gif["frames"]:
+        return
+    bg_lbl = tk.Label(frame, bd=0, bg=COLORS["bg_dark"])
+    bg_lbl.place(relx=0, rely=0, relwidth=1, relheight=1)
+    _gif["label"] = bg_lbl
+
+
 def show_screen(root, build_fn):
     """Wechselt zum neuen Screen, zerstört den alten."""
     if app_state["current_screen"]:
@@ -274,19 +339,100 @@ def show_screen(root, build_fn):
 # ─────────────────────────────────────────────
 # LOGIN / REGISTER SCREEN
 # ─────────────────────────────────────────────
+def show_forgot_password(root):
+    """Öffnet den Passwort-zurücksetzen-Dialog als Toplevel."""
+    win = tk.Toplevel()
+    win.title(t("reset_password"))
+    win.resizable(False, False)
+    win.configure(bg=COLORS["bg_dark"])
+    win.grab_set()
+
+    card = tk.Frame(win, bg=COLORS["bg_card"], padx=30, pady=24)
+    card.pack(padx=20, pady=20)
+
+    tk.Label(card, text=t("reset_password"),
+             bg=COLORS["bg_card"], fg=COLORS["accent"],
+             font=("Segoe UI", 14, "bold")).pack(pady=(0, 16))
+
+    make_label(card, t("username"), size=10).pack(anchor="w")
+    entry_user = make_entry(card)
+    entry_user.pack(pady=(2, 10), fill="x")
+
+    make_label(card, t("new_password"), size=10).pack(anchor="w")
+    entry_pw1 = make_entry(card, show="*")
+    entry_pw1.pack(pady=(2, 10), fill="x")
+
+    make_label(card, t("confirm_password"), size=10).pack(anchor="w")
+    entry_pw2 = make_entry(card, show="*")
+    entry_pw2.pack(pady=(2, 12), fill="x")
+
+    lbl_msg = tk.Label(card, text="", bg=COLORS["bg_card"],
+                       fg=COLORS["accent"], font=("Segoe UI", 10), wraplength=260)
+    lbl_msg.pack()
+
+    def do_reset():
+        if entry_pw1.get() != entry_pw2.get():
+            lbl_msg.config(text=t("passwords_no_match"), fg=COLORS["accent"])
+            return
+        ok, err = auth.reset_password(entry_user.get(), entry_pw1.get())
+        if ok:
+            lbl_msg.config(text=t("password_reset_ok"), fg=COLORS["win"])
+            win.after(2000, win.destroy)
+        else:
+            lbl_msg.config(text=err, fg=COLORS["accent"])
+
+    make_button(card, t("reset_password"), do_reset).pack(fill="x", pady=(8, 0))
+
+    # Fenster zentrieren
+    win.update_idletasks()
+    x = (win.winfo_screenwidth() - win.winfo_reqwidth()) // 2
+    y = (win.winfo_screenheight() - win.winfo_reqheight()) // 2
+    win.geometry(f"+{x}+{y}")
+
+
 def build_login_screen(root, frame):
     """Baut den Login/Register-Screen."""
-    # Header
-    tk.Label(
-        frame, text="BlitzBoard",
-        bg=COLORS["bg_dark"], fg=COLORS["accent"],
-        font=("Segoe UI", 28, "bold")
-    ).pack(pady=(40, 4))
-    tk.Label(
-        frame, text=t("title"),
-        bg=COLORS["bg_dark"], fg=COLORS["text_dim"],
-        font=("Segoe UI", 13)
-    ).pack(pady=(0, 30))
+    set_gif_background(frame)
+
+    # Header: Logo links + Titel rechts, vertikal zentriert
+    header_row = tk.Frame(frame, bg=COLORS["bg_dark"])
+    header_row.pack(pady=(40, 30))
+
+    login_logo_img = None
+    try:
+        from PIL import Image, ImageTk
+        import os
+        logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "Mockups", "Assets", "Logo",
+                                 "Only_Controller_Logo_HHBKTendo.png")
+        logo_pil = Image.open(logo_path).convert("RGBA")
+        pixels = logo_pil.load()
+        bg_color = pixels[0, 0][:3]
+        for y in range(logo_pil.height):
+            for x in range(logo_pil.width):
+                r, g, b, a = pixels[x, y]
+                if all(abs(int(c) - int(bg)) <= 30 for c, bg in zip((r, g, b), bg_color)):
+                    pixels[x, y] = (r, g, b, 0)
+        target_h = 72
+        target_w = int(logo_pil.width * target_h / logo_pil.height)
+        logo_pil = logo_pil.resize((target_w, target_h), Image.LANCZOS)
+        login_logo_img = ImageTk.PhotoImage(logo_pil)
+    except Exception:
+        pass
+
+    if login_logo_img:
+        lbl_logo = tk.Label(header_row, image=login_logo_img, bg=COLORS["bg_dark"])
+        lbl_logo.image = login_logo_img
+        lbl_logo.pack(side="left", padx=(0, 16))
+
+    text_col = tk.Frame(header_row, bg=COLORS["bg_dark"])
+    text_col.pack(side="left")
+    tk.Label(text_col, text="BlitzBoard",
+             bg=COLORS["bg_dark"], fg=COLORS["accent"],
+             font=("Segoe UI", 28, "bold")).pack(anchor="w")
+    tk.Label(text_col, text=t("title"),
+             bg=COLORS["bg_dark"], fg=COLORS["text_dim"],
+             font=("Segoe UI", 13)).pack(anchor="w")
 
     # Card
     card = tk.Frame(frame, bg=COLORS["bg_card"], padx=30, pady=30)
@@ -353,6 +499,14 @@ def build_login_screen(root, frame):
     make_button(card, t("register"), do_register,
                 bg=COLORS["accent2"]).pack(fill="x", pady=4)
 
+    forgot_lbl = tk.Label(card, text=t("forgot_password"),
+                          bg=COLORS["bg_card"], fg=COLORS["text_dim"],
+                          font=("Segoe UI", 9), cursor="hand2")
+    forgot_lbl.pack(anchor="e", pady=(2, 0))
+    forgot_lbl.bind("<Button-1>", lambda e: show_forgot_password(root))
+    forgot_lbl.bind("<Enter>", lambda e: forgot_lbl.config(fg=COLORS["text_light"]))
+    forgot_lbl.bind("<Leave>", lambda e: forgot_lbl.config(fg=COLORS["text_dim"]))
+
     # Trennlinie
     tk.Frame(card, bg=COLORS["text_dim"], height=1).pack(fill="x", pady=12)
 
@@ -366,7 +520,7 @@ def build_login_screen(root, frame):
 
     lang_btn = tk.Label(
         frame, text="DE / EN",
-        bg=COLORS["bg_mid"], fg=COLORS["text_dim"],
+        bg=COLORS["bg_dark"], fg=COLORS["text_dim"],
         font=("Segoe UI", 9), cursor="hand2", padx=6, pady=4
     )
     lang_btn.bind("<Button-1>", lambda e: toggle_lang())
@@ -378,42 +532,13 @@ def build_login_screen(root, frame):
 # ─────────────────────────────────────────────
 def build_main_menu(root, frame):
     """Baut das Hauptmenü."""
-    # Animiertes GIF als Hintergrund (benötigt Pillow: pip install Pillow)
-    try:
-        from PIL import Image, ImageTk, ImageEnhance, ImageSequence
-        import os
-        gif_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "Mockups", "Assets", "Background",
-                                "6m2ocolc0ip91.gif")
-        gif = Image.open(gif_path)
-        gif_frames = []
-        gif_delays = []
-        for gif_frame in ImageSequence.Iterator(gif):
-            delay = gif_frame.info.get("duration", 100)
-            resized = gif_frame.convert("RGBA").resize((820, 700), Image.LANCZOS)
-            darkened = ImageEnhance.Brightness(resized).enhance(0.25)
-            gif_frames.append(ImageTk.PhotoImage(darkened))
-            gif_delays.append(max(delay, 50))  # mind. 50ms pro Frame
-
-        if gif_frames:
-            bg_lbl = tk.Label(frame, bd=0, bg=COLORS["bg_dark"])
-            bg_lbl.place(relx=0, rely=0, relwidth=1, relheight=1)
-
-            def animate(idx=0):
-                try:
-                    bg_lbl.config(image=gif_frames[idx])
-                    frame.after(gif_delays[idx], animate, (idx + 1) % len(gif_frames))
-                except tk.TclError:
-                    pass  # Frame wurde zerstört (Screen-Wechsel) → Animation stoppt automatisch
-            animate()
-    except Exception:
-        pass  # Kein Pillow oder GIF nicht gefunden → normaler Hintergrund
+    set_gif_background(frame)
 
     user = auth.get_current_user()
     name = user["username"] if user else "Guest"
 
-    # Header
-    header = tk.Frame(frame, bg=COLORS["bg_mid"], pady=12)
+    # Header (bg_dark = transparent zum GIF)
+    header = tk.Frame(frame, bg=COLORS["bg_dark"], pady=12)
     header.pack(fill="x")
 
     # Controller-Logo links neben HHBKTendo
@@ -422,7 +547,7 @@ def build_main_menu(root, frame):
         from PIL import Image, ImageTk
         import os
         logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 "Mockups", "Assets", "Logo", "Screenshot 2026-04-28 145738.png")
+                                 "Mockups", "Assets", "Logo", "Only_Controller_Logo_HHBKTendo.png")
         logo_pil = Image.open(logo_path).convert("RGBA")
 
         # Hintergrundfarbe (Eckpixel oben-links) transparent machen
@@ -444,18 +569,18 @@ def build_main_menu(root, frame):
         pass
 
     if logo_img:
-        lbl_logo = tk.Label(header, image=logo_img, bg=COLORS["bg_mid"])
+        lbl_logo = tk.Label(header, image=logo_img, bg=COLORS["bg_dark"])
         lbl_logo.image = logo_img  # Referenz halten, sonst löscht Garbage Collector das Bild
         lbl_logo.pack(side="left", padx=(12, 4))
     else:
         tk.Label(header, text="🎮",
-                 bg=COLORS["bg_mid"], font=("Segoe UI", 20)).pack(side="left", padx=(16, 2))
+                 bg=COLORS["bg_dark"], font=("Segoe UI", 20)).pack(side="left", padx=(16, 2))
 
     tk.Label(header, text="HHBKTendo",
-             bg=COLORS["bg_mid"], fg=COLORS["accent"],
+             bg=COLORS["bg_dark"], fg=COLORS["accent"],
              font=("Segoe UI", 20, "bold")).pack(side="left", padx=(0, 4))
     tk.Label(header, text=f"  {name}",
-             bg=COLORS["bg_mid"], fg=COLORS["text_dim"],
+             bg=COLORS["bg_dark"], fg=COLORS["text_dim"],
              font=("Segoe UI", 11)).pack(side="left")
 
     def do_logout():
@@ -470,7 +595,7 @@ def build_main_menu(root, frame):
 
     lang_btn = tk.Label(
         header, text="DE/EN",
-        bg=COLORS["bg_mid"], fg=COLORS["text_dim"],
+        bg=COLORS["bg_dark"], fg=COLORS["text_dim"],
         font=("Segoe UI", 9), cursor="hand2", padx=6, pady=4
     )
     lang_btn.bind("<Button-1>", lambda e: toggle_lang())
@@ -478,7 +603,11 @@ def build_main_menu(root, frame):
 
     if user:
         make_button(header, t("logout"), do_logout, width=10,
-                    bg=COLORS["bg_mid"], fg=COLORS["text_dim"]).pack(side="right", padx=10)
+                    bg=COLORS["bg_dark"], fg=COLORS["text_dim"]).pack(side="right", padx=10)
+    else:
+        make_button(header, t("login"),
+                    lambda: show_screen(root, build_login_screen), width=10,
+                    bg=COLORS["bg_dark"], fg=COLORS["text_dim"]).pack(side="right", padx=10)
 
     # Titel
     make_label(frame, t("select_game"), size=16, bold=True).pack(pady=(30, 10))
@@ -649,6 +778,7 @@ def build_game_screen(root, frame):
     """Baut den Spielscreen auf."""
     global board_canvas, status_label, game_widgets
     game_widgets = {}
+    set_gif_background(frame)
 
     game = app_state["game"]
     user = auth.get_current_user()
@@ -665,8 +795,8 @@ def build_game_screen(root, frame):
     app_state["game_over"] = False
     app_state["ai_thinking"] = False
 
-    # Header
-    header = tk.Frame(frame, bg=COLORS["bg_mid"], pady=10)
+    # Header (bg_dark = transparent zum GIF)
+    header = tk.Frame(frame, bg=COLORS["bg_dark"], pady=10)
     header.pack(fill="x")
 
     game_name = t("pawn_chess") if game == "pawn_chess" else t("tictactoe")
@@ -674,17 +804,17 @@ def build_game_screen(root, frame):
     diff_name = diff_names[app_state["difficulty"]]
 
     tk.Label(header, text="BlitzBoard",
-             bg=COLORS["bg_mid"], fg=COLORS["accent"],
+             bg=COLORS["bg_dark"], fg=COLORS["accent"],
              font=("Segoe UI", 16, "bold")).pack(side="left", padx=(20, 6))
     tk.Label(header, text=f"{game_name}  |  {t('level')}: {diff_name}",
-             bg=COLORS["bg_mid"], fg=COLORS["text_light"],
+             bg=COLORS["bg_dark"], fg=COLORS["text_light"],
              font=("Segoe UI", 13, "bold")).pack(side="left", padx=(0, 20))
 
     def do_abort():
         if messagebox.askyesno(t("abort"), t("confirm_abort")):
             show_screen(root, build_main_menu)
 
-    btn_frame = tk.Frame(header, bg=COLORS["bg_mid"])
+    btn_frame = tk.Frame(header, bg=COLORS["bg_dark"])
     btn_frame.pack(side="right", padx=10)
     make_button(btn_frame, t("rules"),
                 lambda: show_rules(root, game), width=10,
@@ -1020,14 +1150,37 @@ def main():
     database.init_db()
 
     root = tk.Tk()
-    root.title("HHBKTendo-BlitzBoard")
+    root.title("BlitzBoard")
     root.geometry("820x700")
     root.minsize(720, 600)
     root.configure(bg=COLORS["bg_dark"])
 
-    # Fenstericon (falls vorhanden)
+    # GIF-Frames einmalig laden und globalen Animations-Takt starten
+    _gif["root"] = root
+    _load_gif_frames()
+    if _gif["frames"]:
+        _gif_tick()
+
+    # Fenstericon: Controller-Logo aus den Assets
     try:
-        root.iconbitmap("icon.ico")
+        import os
+        from PIL import Image, ImageTk
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "Mockups", "Assets", "Logo",
+                                 "Only_Controller_Logo_HHBKTendo.png")
+        icon_pil = Image.open(icon_path).convert("RGBA")
+        # Hintergrund transparent machen (gleiche Logik wie im Header)
+        pixels = icon_pil.load()
+        bg_color = pixels[0, 0][:3]
+        for y in range(icon_pil.height):
+            for x in range(icon_pil.width):
+                r, g, b, a = pixels[x, y]
+                if all(abs(int(c) - int(bg)) <= 30 for c, bg in zip((r, g, b), bg_color)):
+                    pixels[x, y] = (r, g, b, 0)
+        icon_pil = icon_pil.resize((32, 32), Image.LANCZOS)
+        icon_img = ImageTk.PhotoImage(icon_pil)
+        root.iconphoto(True, icon_img)
+        root._icon_img = icon_img  # Referenz halten
     except Exception:
         pass
 
