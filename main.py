@@ -328,15 +328,74 @@ def build_login_screen(root, frame):
 # ─────────────────────────────────────────────
 def build_main_menu(root, frame):
     """Baut das Hauptmenü."""
+    # Animiertes GIF als Hintergrund (benötigt Pillow: pip install Pillow)
+    try:
+        from PIL import Image, ImageTk, ImageEnhance, ImageSequence
+        import os
+        gif_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "Mockups", "Assets", "Background",
+                                "6m2ocolc0ip91.gif")
+        gif = Image.open(gif_path)
+        gif_frames = []
+        gif_delays = []
+        for gif_frame in ImageSequence.Iterator(gif):
+            delay = gif_frame.info.get("duration", 100)
+            resized = gif_frame.convert("RGBA").resize((820, 700), Image.LANCZOS)
+            darkened = ImageEnhance.Brightness(resized).enhance(0.25)
+            gif_frames.append(ImageTk.PhotoImage(darkened))
+            gif_delays.append(max(delay, 50))  # mind. 50ms pro Frame
+
+        if gif_frames:
+            bg_lbl = tk.Label(frame, bd=0, bg=COLORS["bg_dark"])
+            bg_lbl.place(relx=0, rely=0, relwidth=1, relheight=1)
+
+            def animate(idx=0):
+                try:
+                    bg_lbl.config(image=gif_frames[idx])
+                    frame.after(gif_delays[idx], animate, (idx + 1) % len(gif_frames))
+                except tk.TclError:
+                    pass  # Frame wurde zerstört (Screen-Wechsel) → Animation stoppt automatisch
+            animate()
+    except Exception:
+        pass  # Kein Pillow oder GIF nicht gefunden → normaler Hintergrund
+
     user = auth.get_current_user()
     name = user["username"] if user else "Guest"
 
     # Header
     header = tk.Frame(frame, bg=COLORS["bg_mid"], pady=12)
     header.pack(fill="x")
+
+    # Controller-Logo links neben HHBKTendo
+    logo_img = None
+    try:
+        from PIL import Image, ImageTk
+        import os
+        logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "Mockups", "Assets", "Logo", "Logo_HHBKTendo.png")
+        logo_pil = Image.open(logo_path)
+        # Nur den Controller-Teil ausschneiden (linkes Viertel des 560×200-Bildes)
+        crop_w = int(logo_pil.width * 0.26)
+        logo_pil = logo_pil.crop((0, 0, crop_w, logo_pil.height))
+        # Auf Header-Höhe skalieren
+        target_h = 44
+        target_w = int(logo_pil.width * target_h / logo_pil.height)
+        logo_pil = logo_pil.resize((target_w, target_h), Image.LANCZOS)
+        logo_img = ImageTk.PhotoImage(logo_pil)
+    except Exception:
+        pass
+
+    if logo_img:
+        lbl_logo = tk.Label(header, image=logo_img, bg=COLORS["bg_mid"])
+        lbl_logo.image = logo_img  # Referenz halten, sonst löscht Garbage Collector das Bild
+        lbl_logo.pack(side="left", padx=(12, 4))
+    else:
+        tk.Label(header, text="🎮",
+                 bg=COLORS["bg_mid"], font=("Segoe UI", 20)).pack(side="left", padx=(16, 2))
+
     tk.Label(header, text="HHBKTendo",
              bg=COLORS["bg_mid"], fg=COLORS["accent"],
-             font=("Segoe UI", 20, "bold")).pack(side="left", padx=20)
+             font=("Segoe UI", 20, "bold")).pack(side="left", padx=(0, 4))
     tk.Label(header, text=f"  {name}",
              bg=COLORS["bg_mid"], fg=COLORS["text_dim"],
              font=("Segoe UI", 11)).pack(side="left")
@@ -563,9 +622,12 @@ def build_game_screen(root, frame):
     diff_names = ["", t("easy"), t("medium"), t("hard"), t("expert"), t("master")]
     diff_name = diff_names[app_state["difficulty"]]
 
+    tk.Label(header, text="BlitzBoard",
+             bg=COLORS["bg_mid"], fg=COLORS["accent"],
+             font=("Segoe UI", 16, "bold")).pack(side="left", padx=(20, 6))
     tk.Label(header, text=f"{game_name}  |  {t('level')}: {diff_name}",
              bg=COLORS["bg_mid"], fg=COLORS["text_light"],
-             font=("Segoe UI", 13, "bold")).pack(side="left", padx=20)
+             font=("Segoe UI", 13, "bold")).pack(side="left", padx=(0, 20))
 
     def do_abort():
         if messagebox.askyesno(t("abort"), t("confirm_abort")):

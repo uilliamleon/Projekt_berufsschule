@@ -11,7 +11,13 @@ Die Sammlung enthält **Bauernschach** und **Tic-Tac-Toe (4 gewinnt)**, jeweils 
 - **Python 3.10 oder neuer**  
   Download: https://www.python.org/downloads/
 - **tkinter** (in der Python-Standardbibliothek enthalten)
-- Keine weiteren Abhängigkeiten — es müssen keine Pakete installiert werden.
+- **Pillow** – für den Hintergrundeffekt im Hauptmenü:
+
+```bash
+C:\Users\lgeldmacher\AppData\Local\Programs\Python\Python313\python.exe -m pip install Pillow
+```
+
+> Ohne Pillow startet die App trotzdem — der Hintergrundeffekt wird dann einfach weggelassen.
 
 ### tkinter auf macOS nachinstallieren (falls nötig)
 

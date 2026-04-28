@@ -11,6 +11,7 @@
 | Datenbank | SQLite (über Standardbibliothek `sqlite3`) |
 | Architektur | Prozedural / modulbasiert |
 | Unterstützte Sprachen | Deutsch, Englisch |
+| Optionale Abhängigkeit | Pillow (`pip install Pillow`) – Hintergrundbild im Hauptmenü |
 
 ---
 
