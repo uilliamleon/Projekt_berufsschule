@@ -155,7 +155,7 @@ python3 -m pytest test_all.py -v
 
 - Die Anwendung ist **prozedural** programmiert (keine Klassen für Spiellogik).
 - Der KI-Zug läuft in einem **separaten Thread**, um die GUI nicht zu blockieren (max. 45 Sekunden).
-- Buttons sind als `tk.Label` mit Event-Bindings implementiert, da `tk.Button` auf macOS die Hintergrundfarbe ignoriert.
+- Buttons und Auswahl-Selektoren sind als `tk.Label` mit Event-Bindings implementiert, da native tkinter-Widgets (`tk.Button`, `tk.Radiobutton`) auf macOS Hintergrundfarben ignorieren.
 - Zielplattform laut Lastenheft: **Windows 10/11**. Die Anwendung läuft ebenfalls unter macOS und Linux.
 
 ---

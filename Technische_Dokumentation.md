@@ -86,6 +86,7 @@ app_state = {
 | `show_leaderboard()` | Bestenliste als Toplevel-Popup |
 | `show_rules()` | Spielregeln als Toplevel-Popup |
 | `t(key)` | Übersetzungsfunktion: gibt Text in aktueller Sprache zurück |
+| `make_radio_group(parent, options, variable)` | Baut einen gestylten Schwierigkeits-Selektor aus `tk.Label`-Zeilen (◆/◇ Indikator, Hover-Effekt) als Ersatz für native `tk.Radiobutton`-Widgets |
 
 #### Threading-Konzept
 
@@ -505,6 +506,17 @@ Das Design verwendet ein einheitliches Dunkelblau-Farbschema (definiert im `COLO
 | Brett hell | `#eecc99` |
 | Brett dunkel | `#8b5e3c` |
 | Gültiger Zug | `#2e7d32` |
+
+### Benutzerdefinierte UI-Komponenten
+
+Native tkinter-Widgets werden konsequent durch eigene Label-basierte Komponenten ersetzt, um das Dark-Theme korrekt darzustellen (native Widgets ignorieren Hintergrundfarben auf macOS):
+
+| Komponente | Implementierung | Ersetzt |
+|---|---|---|
+| Buttons | `tk.Label` + `<Button-1>`-Binding | `tk.Button` |
+| Schwierigkeits-Selektor | `make_radio_group()` — Label-Zeilen mit ◆/◇-Indikator, Hover-Highlight und `tk.IntVar`-Bindung | `tk.Radiobutton` |
+
+Der Schwierigkeits-Selektor in `make_radio_group()` zeigt den ausgewählten Eintrag mit Akzentfarbe und Fettschrift (◆), alle anderen gedimmt (◇). Hover-Effekte und Klick-Handler sind direkt auf alle drei Zeilen-Widgets gebunden.
 
 ### Mehrsprachigkeit
 
