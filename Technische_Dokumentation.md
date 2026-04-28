@@ -127,32 +127,92 @@ Rekursive MiniMax-Funktion mit Alpha-Beta-Pruning.
 | `is_maximizing` | bool | `True` = KI (Maximizer), `False` = Mensch (Minimizer) |
 | `alpha` | float | Alpha-Wert (initialisiert mit `-inf`) |
 | `beta` | float | Beta-Wert (initialisiert mit `+inf`) |
-| `get_moves_fn` | callable | `fn(board, is_maximizing) → [Züge]` |
-| `apply_move_fn` | callable | `fn(board, move, is_maximizing) → neues Board` |
-| `evaluate_fn` | callable | `fn(board) → int` (heuristische Bewertung) |
-| `is_terminal_fn` | callable | `fn(board) → (bool, int)` |
+| `get_moves_fn` | callable | `fn(board, is_maximizing) → [Züge]` – pawn_chess: `pc.get_valid_moves`, tictactoe: `ttt.get_valid_moves` |
+| `apply_move_fn` | callable | `fn(board, move, is_maximizing) → neues Board` – pawn_chess: `pc.apply_move`, tictactoe: `ttt.apply_move` |
+| `evaluate_fn` | callable | `fn(board) → int` (heuristische Bewertung) – pawn_chess: `pc.evaluate`, tictactoe: `ttt.evaluate` |
+| `is_terminal_fn` | callable | `fn(board) → (bool, int)` – pawn_chess: `pc.is_terminal`, tictactoe: `ttt.is_terminal` |
 
 **Rückgabe:** Numerische Bewertung des besten gefundenen Zuges.
 
-#### `get_best_move(board, depth, get_moves_fn, apply_move_fn, evaluate_fn, is_terminal_fn)`
+#### Wie der rekursive Abstieg funktioniert
 
-Wrapper um `minimax()`. Iteriert alle möglichen KI-Züge, ruft `minimax()` für jeden auf und gibt den Zug mit dem höchsten Score zurück.
+Der Algorithmus baut gedanklich einen **Spielbaum** auf: Jeder Knoten ist ein Brettzustand, jede Kante ein Zug. `get_moves_fn` liefert an jedem Knoten alle möglichen Züge; für jeden davon erzeugt `apply_move_fn` das neue Brett, und `minimax()` ruft sich selbst mit diesem Brett und `depth - 1` auf.
 
-**Rückgabe:** Bester Zug oder `None` wenn keine Züge möglich.
+```
+minimax(brett, depth=3, is_maximizing=True)      ← KI ist dran
+│
+├── get_moves_fn → [Zug1, Zug2, Zug3]
+│
+├── apply_move(Zug1) → brett_A
+│   └── minimax(brett_A, depth=2, is_maximizing=False)   ← Mensch ist dran
+│       ├── apply_move(Zug1a) → brett_A1
+│       │   └── minimax(brett_A1, depth=1, ...)
+│       │       └── minimax(..., depth=0) → evaluate_fn() = −5
+│       └── apply_move(Zug1b) → brett_A2
+│           └── minimax(..., depth=0) → evaluate_fn() = +20
+│
+├── apply_move(Zug2) → brett_B
+│   └── ...
+```
+
+Die Rekursion endet bei `depth == 0` (Suchgrenze erreicht) oder wenn `is_terminal_fn` ein Spielende meldet. Ab diesem Punkt werden die Scores nach oben durchgereicht:
+
+- **Maximizer (KI):** wählt den **höchsten** Score seiner Kinder → `best_score = max(best_score, score)`
+- **Minimizer (Mensch):** wählt den **niedrigsten** Score seiner Kinder → `best_score = min(best_score, score)`
+
+```
+Tiefe 0 (Blätter):   −5      +20      +3      +8
+Tiefe 1 (KI):        max(−5, +20) = +20      max(+3, +8) = +8
+Tiefe 2 (Mensch):            min(+20, +8) = +8
+```
+
+So simuliert der Algorithmus, dass beide Spieler **optimal** spielen.
+
+#### Heuristische Bewertung (`evaluate_fn`)
+
+Wenn `depth == 0` erreicht ist, weiß der Algorithmus nicht mehr, wer das Spiel letztendlich gewinnt. Stattdessen **schätzt** `evaluate_fn` anhand von Faustregeln, wie gut die Stellung für die KI ist (positiv = gut für KI, negativ = gut für Mensch). Diese Schätzung heißt **heuristische Bewertung**.
 
 #### Alpha-Beta-Pruning
 
-```
-Maximizer-Knoten:
-  alpha = max(alpha, score)
-  if beta <= alpha: break  # Beta-Cut (Gegner würde diesen Pfad nie wählen)
+`alpha` und `beta` verfolgen, welche Scores die beiden Seiten bisher garantiert erreichen können:
 
-Minimizer-Knoten:
-  beta = min(beta, score)
-  if beta <= alpha: break  # Alpha-Cut
+- **alpha** = bester Score, den die KI bisher sicherstellen kann
+- **beta** = bester Score, den der Mensch bisher sicherstellen kann
+
+```
+KI-Ebene: Zug A wurde bewertet → Score +10, alpha = +10
+  Jetzt wird Zug B untersucht...
+    Mensch-Ebene: Zug B1 → Score +3, beta = +3
+    if beta(+3) <= alpha(+10): break   ← ABBRUCH
+```
+
+Der Mensch würde Zug B auf maximal +3 begrenzen. Da die KI mit Zug A bereits +10 sicher hat, wählt sie Zug B ohnehin nie — der restliche Ast wird nicht mehr berechnet, ohne das Endergebnis zu verändern:
+
+```
+      [KI]
+     /    \
+  +10      [Mensch]
+            /    \
+          +3      ?   ← wird nie berechnet
 ```
 
 Das Pruning reduziert die Anzahl der zu evaluierenden Knoten erheblich und macht höhere Suchtiefen praktisch möglich.
+
+#### `get_best_move(board, depth, get_moves_fn, apply_move_fn, evaluate_fn, is_terminal_fn)`
+
+Einstiegspunkt für den KI-Zug. Auf den ersten Blick macht `get_best_move` dasselbe wie die oberste Ebene von `minimax()` — der entscheidende Unterschied ist jedoch: `minimax()` gibt nur einen **Score** (eine Zahl) zurück, keinen Zug. `get_best_move` iteriert daher die KI-Züge selbst, merkt sich welcher Zug welchen Score erzeugt, und gibt am Ende **den Zug** zurück.
+
+```python
+for move in moves:
+    new_board = apply_move_fn(board, move, True)
+    score = minimax(new_board, depth - 1, False, ...)  # bewertet die Folgestellung
+    if score > best_score:
+        best_move = move   # ← hier wird der Zug gespeichert
+```
+
+In den rekursiven Zwischenebenen interessiert der Zug nicht — dort zählt nur der Score für `max()`/`min()`. Die Trennung hält `minimax()` einfacher und wiederverwendbar.
+
+**Rückgabe:** Bester Zug oder `None` wenn keine Züge möglich.
 
 ---
 
