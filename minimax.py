@@ -35,6 +35,7 @@ def minimax(board, depth, is_maximizing, alpha, beta,
         alpha         - Bisher bester Score für den Maximizer (-inf am Anfang)
         beta          - Bisher bester Score für den Minimizer (+inf am Anfang)
         get_moves_fn  - fn(board, is_maximizing) -> Liste möglicher Züge
+                        (pawn_chess: pc.get_valid_moves | tictactoe: ttt.get_valid_moves)
         apply_move_fn - fn(board, move, is_maximizing) -> neues Board (Kopie)
         evaluate_fn   - fn(board) -> numerischer Wert (positiv = gut für KI)
         is_terminal_fn- fn(board) -> (terminal: bool, score: int oder None)
