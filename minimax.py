@@ -37,8 +37,11 @@ def minimax(board, depth, is_maximizing, alpha, beta,
         get_moves_fn  - fn(board, is_maximizing) -> Liste möglicher Züge
                         (pawn_chess: pc.get_valid_moves | tictactoe: ttt.get_valid_moves)
         apply_move_fn - fn(board, move, is_maximizing) -> neues Board (Kopie)
+                        (pawn_chess: pc.apply_move | tictactoe: ttt.apply_move)
         evaluate_fn   - fn(board) -> numerischer Wert (positiv = gut für KI)
+                        (pawn_chess: pc.evaluate    | tictactoe: ttt.evaluate)
         is_terminal_fn- fn(board) -> (terminal: bool, score: int oder None)
+                        (pawn_chess: pc.is_terminal | tictactoe: ttt.is_terminal)
 
     Rückgabe:
         Numerischer Bewertungswert des besten Zugs
