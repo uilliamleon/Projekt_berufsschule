@@ -12,7 +12,7 @@ DB_PATH = os.path.join(os.path.dirname(__file__), "games.db")
 def get_connection():
     """Erstellt und gibt eine Datenbankverbindung zurück."""
     conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
+    conn.row_factory = sqlite3.Row  # Erlaubt Spalten-Zugriff per Name und dict()-Konvertierung
     return conn
 
 

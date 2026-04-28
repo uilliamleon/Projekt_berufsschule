@@ -400,6 +400,8 @@ def build_main_menu(root, frame):
                 font=("Segoe UI", 9)
             ).pack(anchor="w")
 
+        # Factory-Funktion: verhindert, dass alle Schleifendurchläufe
+        # dieselbe Variable referenzieren (Closure-over-loop-variable-Problem)
         def make_play_cmd(gk, dv):
             def cmd():
                 app_state["game"] = gk
@@ -619,6 +621,7 @@ def draw_board():
     selected = app_state["selected"]
     valid_moves = app_state["valid_moves"]
 
+    # Nur Zielfelder extrahieren (Index 2,3 im Zug-Tupel: to_row, to_col)
     valid_targets = set((m[2], m[3]) for m in valid_moves) if game == "pawn_chess" else set()
 
     for row in range(6):
@@ -798,7 +801,7 @@ def handle_pawn_chess_click(row, col):
     # Neue Figur auswählen
     if board[row][col] == pc.WHITE:
         all_moves = pc.get_valid_moves(board, False)
-        piece_moves = [m for m in all_moves if m[0] == row and m[1] == col]
+        piece_moves = [m for m in all_moves if m[0] == row and m[1] == col]  # Nur Züge dieser Figur (from_row, from_col)
         app_state["selected"] = (row, col)
         app_state["valid_moves"] = piece_moves
     else:
@@ -847,7 +850,7 @@ def start_ai_turn():
         # GUI-Update im Hauptthread
         board_canvas.after(0, lambda: after_ai_turn(winner))
 
-    thread = threading.Thread(target=ai_worker, daemon=True)
+    thread = threading.Thread(target=ai_worker, daemon=True)  # daemon=True: Thread endet automatisch mit dem Programm
     thread.start()
 
 

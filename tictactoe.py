@@ -43,7 +43,7 @@ def get_valid_moves(board, is_maximizing):
         for dr in range(-1, 2):
             for dc in range(-1, 2):
                 if dr == 0 and dc == 0:
-                    continue
+                    continue  # Die besetzte Zelle selbst ist kein Nachbar
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < BOARD_SIZE and 0 <= nc < BOARD_SIZE and board[nr][nc] == EMPTY:
                     candidates.add((nr, nc))
@@ -119,6 +119,7 @@ def _count_lines(board, player, length):
     for row in range(BOARD_SIZE):
         for col in range(BOARD_SIZE - WIN_LENGTH + 1):
             window = [board[row][col + k] for k in range(WIN_LENGTH)]
+            # Offene Linie: genau `length` eigene Steine, kein Gegner im 4er-Fenster
             if window.count(player) == length and window.count(opponent) == 0:
                 count += 1
 
@@ -167,7 +168,7 @@ def evaluate(board):
         for col in range(BOARD_SIZE):
             if board[row][col] == AI:
                 dist = abs(row - center) + abs(col - center)
-                score += max(0, 3 - dist)
+                score += max(0, 3 - dist)  # Bonus: 3 im Zentrum, 2 nebenan, 1 weiter außen, 0 am Rand
             elif board[row][col] == HUMAN:
                 dist = abs(row - center) + abs(col - center)
                 score -= max(0, 3 - dist)
